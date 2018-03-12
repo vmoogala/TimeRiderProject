@@ -1,16 +1,173 @@
 <!DOCTYPE html>
-<meta charset="utf-8">
-<html>
-<head>
-    <title>Time Rider</title>
-    <link href="https://fonts.googleapis.com/css?family=Anton" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="app.css">
-    <script type="text/javascript" src="d3/d3.js"></script>
-    <script type="text/javascript" src="my_json_data.js"></script>
-</head>
-<body>
-
-
-</body>
-<script type="text/javascript" src="app.js"></script>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>TimeRider</title>
+		<link href="css/bootstrap.css" rel="stylesheet">
+		<link href="css/app.css" rel="stylesheet">
+		<script type="text/javascript" src="js/d3/d3.js"></script>
+	</head>
+	<body>
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-2">
+					<div class="dropdown">
+						
+						<button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown">
+						Action
+						</button>
+						<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+							<a class="dropdown-item disabled" href="#">Action</a> <a class="dropdown-item" href="#">Another action</a> <a class="dropdown-item" href="#">Something else here</a>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-8">
+				</div>
+				<div class="col-md-2">
+					<div class="btn-group btn-group-sm" role="group">
+						
+						<button class="btn btn-secondary" type="button">
+						Left
+						</button>
+						<button class="btn btn-secondary" type="button">
+						Center
+						</button>
+						<button class="btn btn-secondary" type="button">
+						Right
+						</button>
+						<button class="btn btn-secondary" type="button">
+						Justify
+						</button>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-10">
+				</div>
+				<div class="col-md-2">
+				</div>
+			</div>
+		</div>
+		<div class="tooltip1">
+			<div class="heading-tooltip">
+				<p>Date: <b>2009-01-28</b><br/>
+					<b>10009: John Doe</b>, male<br/>
+				Date of birth: 1996-01-01</p>
+			</div>
+			<div class="left-tooltip">
+				<div>
+					<span class="header-text-tooltip">Biometric data</span>
+					<div class ="key-names-tooltip">
+						Body Mass Index <br/>
+						Size[cm] <br/>
+						Weight[kg] <br/>
+						BP syst. [mmHg] <br/>
+						BP diast. [mmHg] <br/>
+						Smoker <br/>
+					</div>
+					<div class ="value-names-tooltip">
+						22.9 <br/>
+						175 <br/>
+						70 <br/>
+						125 <br/>
+						80 <br/>
+						X <br/>
+					</div>
+				</div>
+				<div>
+					<span class="header-text-tooltip">OAD therapy</span>
+					<div class ="key-names-tooltip">
+						SH <br/>
+						Met <br/>
+						Glit <br/>
+						DPP4 <br/>
+						Acarb <br/>
+					</div>
+					<div class ="value-names-tooltip">
+						22.9 <br/>
+						175 <br/>
+						70 <br/>
+						125 <br/>
+						80 <br/>
+					</div>
+				</div>
+				<div>
+					<span class="header-text-tooltip">Concomitant medication</span>
+					<div class ="key-names-tooltip">
+						ACE <br/>
+						Bbl <br/>
+						BP Other <br/>
+						Statin <br/>
+						ASS <br/>
+					</div>
+					<div class ="value-names-tooltip">
+						22.9 <br/>
+						175 <br/>
+						70 <br/>
+						125 <br/>
+						80 <br/>
+					</div>
+				</div>
+			</div>
+			<div class="right-tooltip">
+				<div>
+					<span class="header-text-tooltip">Laboratory</span>
+					<div class ="key-names-tooltip">
+						Blood sugar [mg/dl] <br/>
+						HbA1c[%] <br/>
+						Cholesterol [mg/dl] <br/>
+						Triglyceride [mg/dl] <br/>
+						Creatinine [mg/dl] <br/>
+						Protein in urine <br/>
+					</div>
+					<div class ="value-names-tooltip">
+						246 <br/>
+						10 <br/>
+						163 <br/>
+						72 <br/>
+						0.8 <br/>
+						<br/>
+					</div>
+				</div>
+				<div>
+					<span class="header-text-tooltip">Insulin therapy</span>
+					<div class ="key-names-tooltip">
+						VZI <br/>
+						ALT <br/>
+						Misch <br/>
+					</div>
+					<div class ="value-names-tooltip">
+						<br/>
+						<br/>
+						<br/>
+					</div>
+				</div>
+				<div>
+					<span class="header-text-tooltip">Organ Damages</span>
+					<div class ="key-names-tooltip">
+						Retinopathy <br/>
+						Stroke <br/>
+						Coronary Heart D. <br/>
+						PAOD <br/>
+						Polyneuropathy <br/>
+						Nephropathie <br/>
+					</div>
+					<div class ="value-names-tooltip">
+						22.9 <br/>
+						175 <br/>
+						70 <br/>
+						125 <br/>
+						80 <br/>
+						80 <br/>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="js/jquery.min.js"></script>
+		<script src="js/tether.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/app.js"></script>
+	</body>
 </html>
