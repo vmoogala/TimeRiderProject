@@ -23,7 +23,7 @@ html,body{
 }
 
 svg{
-	margin: auto auto;
+	border: 1px solid gray;
 }
 
 
@@ -34,7 +34,7 @@ CSS for the main body
 */
 .top-most-row{
 	height: 40px;
-	border: 1px solid red;
+	border: 1px solid gray;
 }
 
 .top-row{
@@ -43,7 +43,7 @@ height: 550px;
 
 .bottom-row{
 	height: 50px;
-	border: 1px solid red;
+	border: 1px solid black;
 }
 
 .bottom-most-row{
@@ -51,31 +51,31 @@ height: 550px;
 }
 
 .left-pane{
-border: 1px solid red;
+border: 1px solid black;
 /*height: 600px;*/
 /*margin: 5px 2px;*/
 }
 
 .right-pane{
-border: 1px solid red;
+border: 1px solid black;
 /*height: 600px;*/
 /*margin: 5px 2px;*/
 }
 
 .middle-pane{
-border: 1px solid red;
+border: 1px solid black;
 /*height: 600px;*/
 /*margin: 5px 2px;*/
 }
 
 .bottom-left-pane{
-border: 1px solid red;
+border: 1px solid black;
 /*height: 200px;	*/
 /*margin: 5px 2px;*/
 }
 
 .bottom-right-pane{
-border: 1px solid red;
+border: 1px solid black;
 /*height: 200px;*/
 /*margin: 5px 2px;*/
 }
@@ -87,25 +87,25 @@ CSS for the tabs in left and right pane
 */
 #y-axis-options{
 	margin-top: 20px;
-border: 1px solid red;
+border: 1px solid black;
 height: 200px;
 }
 
 #marks-options{
 	margin-top: 20px;
-	border: 1px solid red;
+	border: 1px solid black;
 	height: 200px;
 }
 
 #filter-options{
 	margin-top: 20px;
-	border: 1px solid red;
+	border: 1px solid black;
 	height: 200px;
 }
 
 #stroke-options{
 		margin-top: 20px;
-	border: 1px solid red;
+	border: 1px solid black;
 	height: 200px;
 }
 
@@ -168,7 +168,7 @@ CSS for the tooltip
 .slider {
     -webkit-appearance: none;  /* Override default CSS styles */
     appearance: none;
-    width: 10%; /* Full-width */
+    width: 100%; /* Full-width */
     height: 10px; /* Specified height */
     background: #d3d3d3; /* Grey background */
     outline: none; /* Remove outline */
@@ -199,4 +199,20 @@ CSS for the tooltip
     /*background: url('contrasticon.png');*/
     background: #4CAF50;  /*Green background*/ 
     cursor: pointer; /* Cursor on hover */
+}
+
+
+.zoom-in-out-images{
+	width: 25px;
+	height: 25px;
+}
+
+.media-buttons{
+    width: 180px;
+    float: none;
+    margin: 0 auto
+}
+
+div.row div.col-md-3 .div div.slidercontainer{
+	width: 20%;
 }

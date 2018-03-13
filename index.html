@@ -22,7 +22,7 @@
 						
 						<label for="select">Y-Axis</label>
 						<select id="select">
-							<option value="">Option 1</option>
+							<option value="">HbA1c</option>
 							<option value="">Option 2</option>
 							<option value="">Option 3</option>
 						</select>
@@ -109,6 +109,8 @@
 					<label>
 						Zoom options
 					</label>
+					<img class="zoom-in-out-images" src="images/increase-zoom-button.svg"></img>
+					<img class="zoom-in-out-images" src="images/decrease-zoom.svg"></img>
 				</div>
 				<div class="col-md-3" >
 					<label>
@@ -128,30 +130,45 @@
 			<div class="row bottom-most-row">
 				<div class="col-md-10 bottom-left-pane">
 					<h5>Animation</h5>
-					<div>
-						<label for="slidecontainer">Tempo</label>
-						<div class="slidecontainer">
-							<input type="range" min="1" max="100" value="50" class="slider" id="myRange">
+					<div class="row">
+						<div class="col-md-3">
+							<div>
+								<label for="slidecontainer">Tempo</label>
+								<div class="slidecontainer">
+									<input type="range" min="1" max="100" value="50" class="slider" id="myRange">
+								</div>
+								<label for="select">Traces</label>
+								<select id="select">
+									<option value="">None</option>
+									<option value="">Option 2</option>
+									<option value="">Option 3</option>
+								</select>
+								<br/>
+								<label for="select">Synch</label>
+								<select id="select">
+									<option value="">calendar date</option>
+									<option value="">patient age</option>
+									<option value="">start of treatment</option>
+									<option value="">end of treatment</option>
+								</select>
+							</div>
 						</div>
-						<label for="select">Traces</label>
-						<select id="select">
-							<option value="">None</option>
-							<option value="">Option 2</option>
-							<option value="">Option 3</option>
-						</select>
-						<br/>
-						<label for="select">Synch</label>
-						<select id="select">
-							<option value="">calendar date</option>
-							<option value="">patient age</option>
-							<option value="">start of treatment</option>
-							<option value="">end of treatment</option>
-						</select>
-					</div>
-					<div>
-						<div class="slidecontainer">
-							<input type="range" min="1" max="100" value="50" class="slider" id="myRange">
+						<div class="col-md-7 centered">
+							
+							<div>
+								<div class="slidecontainer">
+									<input type="range" min="1" max="100" value="50" class="slider" id="myRange">
+								</div>
+							</div>
+							<div class="media-buttons">
+								<img class="zoom-in-out-images" src="images/ic_fast_forward_black_24dp_2x.png"></img>
+								<img class="zoom-in-out-images" src="images/ic_fast_rewind_black_24dp_2x.png"></img>
+								<img class="zoom-in-out-images" src="images/ic_play_arrow_black_24dp_2x.png"></img>
+								<img class="zoom-in-out-images" src="images/ic_skip_next_black_24dp_2x.png"></img>
+								<img class="zoom-in-out-images" src="images/ic_skip_previous_black_24dp_2x.png"></img>
+							</div>
 						</div>
+						<div class="col-md-4"></div>
 					</div>
 				</div>
 				<div class="col-md-2 bottom-right-pane">
