@@ -9,210 +9,252 @@
     padding-right: 2%;
 }*/
 
-/*
-**
-CSS for the default elements
-**
-*/
-html,body{
-	height:900px;
+/**
+ **************************************************************************************
+ **************************************************************************************
+ * CSS for the default elements
+ **************************************************************************************
+ **************************************************************************************
+ */
+html, body {
+	height: 900px;
 }
 
-#input{
+#input {
 	width: 50px;
 }
 
-svg{
+svg {
 	border: 1px solid gray;
 }
 
-
-/*
-**
-CSS for the main body
-**
-*/
-.top-most-row{
+/**
+ **************************************************************************************
+ **************************************************************************************
+ *  CSS for the main body
+ **************************************************************************************
+ **************************************************************************************
+ */
+.top-most-row {
 	height: 40px;
 	border: 1px solid gray;
 }
 
-.top-row{
-height: 550px;
+.top-row {
+	height: 550px;
 }
 
-.bottom-row{
+.bottom-row {
 	height: 50px;
 	border: 1px solid black;
 }
 
-.bottom-most-row{
+.bottom-most-row {
 	height: 150px;
 }
 
-.left-pane{
-border: 1px solid black;
-/*height: 600px;*/
-/*margin: 5px 2px;*/
+.left-pane {
+	border: 1px solid black;/*height: 600px;*/
+
+	/*margin: 5px 2px;*/
 }
 
-.right-pane{
-border: 1px solid black;
-/*height: 600px;*/
-/*margin: 5px 2px;*/
+.right-pane {
+	border: 1px solid black;/*height: 600px;*/
+
+	/*margin: 5px 2px;*/
 }
 
-.middle-pane{
-border: 1px solid black;
-/*height: 600px;*/
-/*margin: 5px 2px;*/
+.middle-pane {
+	border: 1px solid black;/*height: 600px;*/
+
+	/*margin: 5px 2px;*/
 }
 
-.bottom-left-pane{
-border: 1px solid black;
-/*height: 200px;	*/
-/*margin: 5px 2px;*/
+.bottom-left-pane {
+	border: 1px solid black;/*height: 200px;	*/
+
+	/*margin: 5px 2px;*/
 }
 
-.bottom-right-pane{
-border: 1px solid black;
-/*height: 200px;*/
-/*margin: 5px 2px;*/
+.bottom-right-pane {
+	border: 1px solid black;/*height: 200px;*/
+
+	/*margin: 5px 2px;*/
 }
 
-/*
-**
-CSS for the tabs in left and right pane
-**
-*/
-#y-axis-options{
-	margin-top: 20px;
-border: 1px solid black;
-height: 200px;
-}
-
-#marks-options{
+/**
+ **************************************************************************************
+ **************************************************************************************
+ *  CSS for the tabs in left and right pane
+ **************************************************************************************
+ **************************************************************************************
+ */
+#y-axis-options {
 	margin-top: 20px;
 	border: 1px solid black;
 	height: 200px;
 }
 
-#filter-options{
+#marks-options {
 	margin-top: 20px;
 	border: 1px solid black;
 	height: 200px;
 }
 
-#stroke-options{
-		margin-top: 20px;
+#filter-options {
+	margin-top: 20px;
+	border: 1px solid black;
+}
+
+#stroke-options {
+	margin-top: 20px;
 	border: 1px solid black;
 	height: 200px;
 }
 
-/*
-**
-CSS for the tooltip
-**
-*/
-.tooltip1{
-	margin-top: 100px;
-	background: #FF;
+/**
+ **************************************************************************************
+ **************************************************************************************
+ *  CSS for the tooltip
+ **************************************************************************************
+ **************************************************************************************
+ */
+.tooltip1 {
+	margin-top: -20;
 	border: 1px solid gray;
 	width: 400px;
 	padding-left: 10px;
-	min-height: 550px;
+	height: auto;
+	position: absolute;
+	background: white;
+	opacity: 0.9;
+  /*text-align: center;*/
+  /*width: 60px;
+  height: 12px;
+  padding: 8px;*/
+  /*margin-top: -20px;*/
+  /*font: 10px sans-serif;*/
+  /*background: #ddd;*/
+  pointer-events: none;
 }
 
-.heading-tooltip{
+.heading-tooltip {
 	align-content: center;
 }
 
-.header-text-tooltip{
+.header-text-tooltip {
 	color: blue;
 	font-weight: bold;
 }
 
-.left-tooltip{
+.left-tooltip {
 	width: 50%;
 	float: left;
-	overflow: hidden;
-	/*border: 1px solid black;*/
+	overflow: hidden;	/*border: 1px solid black;*/
 }
 
-.right-tooltip{
+.right-tooltip {
 	width: 50%;
 	float: left;
-	overflow: hidden;
-	/*border: 1px solid black;*/
+	overflow: hidden;	/*border: 1px solid black;*/
 }
 
-.key-names-tooltip{
+.key-names-tooltip {
 	float: left;
 	overflow: hidden;
-	width: 75%;
-	/*border: 1px solid red;*/
+	width: 75%;	/*border: 1px solid red;*/
 }
-.value-names-tooltip{
+
+.value-names-tooltip {
 	width: 25%;
-	overflow: hidden;
-	/*border: 1px solid yellow;*/
+	overflow: hidden;	/*border: 1px solid yellow;*/
 }
 
-
-/*Slider*/
+/**
+ **************************************************************************************
+ **************************************************************************************
+ *  CSS for the Slider
+ **************************************************************************************
+ **************************************************************************************
+ */
 .slidecontainer {
-    width: 100%; /* Width of the outside container */
+	width: 100%; /* Width of the outside container */
 }
 
 /* The slider itself */
 .slider {
-    -webkit-appearance: none;  /* Override default CSS styles */
-    appearance: none;
-    width: 100%; /* Full-width */
-    height: 10px; /* Specified height */
-    background: #d3d3d3; /* Grey background */
-    outline: none; /* Remove outline */
-    opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
-    -webkit-transition: .2s; /* 0.2 seconds transition on hover */
-    transition: opacity .2s;
-    border-radius: 5px;
+	-webkit-appearance: none;  /* Override default CSS styles */
+	appearance: none;
+	width: 100%; /* Full-width */
+	height: 10px; /* Specified height */
+	background: #d3d3d3; /* Grey background */
+	outline: none; /* Remove outline */
+	opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+	-webkit-transition: .2s; /* 0.2 seconds transition on hover */
+	transition: opacity .2s;
+	border-radius: 5px;
 }
 
 /* Mouse-over effects */
 .slider:hover {
-    opacity: 1; /* Fully shown on mouse-over */
+	opacity: 1; /* Fully shown on mouse-over */
 }
 
-/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */ 
+/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
 .slider::-webkit-slider-thumb {
-    -webkit-appearance: none; /* Override default look */
-    appearance: none;
-    width: 15px; /* Set a specific slider handle width */
-    height: 15px; /* Slider handle height */
-    background: #4CAF50; /* Green background */    /*background: url('contrasticon.png');*/
-    cursor: pointer; /* Cursor on hover */
+	-webkit-appearance: none; /* Override default look */
+	appearance: none;
+	width: 15px; /* Set a specific slider handle width */
+	height: 15px; /* Slider handle height */
+	background: #4CAF50; /* Green background */
+
+	/*background: url('contrasticon.png');*/
+	cursor: pointer; /* Cursor on hover */
 }
 
 .slider::-moz-range-thumb {
-    width: 25px; /* Set a specific slider handle width */
-    height: 25px; /* Slider handle height */
-    /*background: url('contrasticon.png');*/
-    background: #4CAF50;  /*Green background*/ 
-    cursor: pointer; /* Cursor on hover */
+	width: 25px; /* Set a specific slider handle width */
+	height: 25px; /* Slider handle height */
+
+	/*background: url('contrasticon.png');*/
+	background: #4CAF50;  /*Green background*/
+	cursor: pointer; /* Cursor on hover */
 }
 
+/**
+ **************************************************************************************
+ **************************************************************************************
+ *  CSS for D3
+ **************************************************************************************
+ **************************************************************************************
+ */
+.grid line {
+	stroke: #ddd;
+}
 
-.zoom-in-out-images{
+#svg-div{
+	margin-top: 15px;
+}
+
+/**
+ **************************************************************************************
+ **************************************************************************************
+ *  Everything else
+ **************************************************************************************
+ **************************************************************************************
+ */
+.zoom-in-out-images {
 	width: 25px;
 	height: 25px;
 }
 
-.media-buttons{
-    width: 180px;
-    float: none;
-    margin: 0 auto
+.media-buttons {
+	width: 180px;
+	float: none;
+	margin: 0 auto
 }
 
-div.row div.col-md-3 .div div.slidercontainer{
+/*div.row div.col-md-3 .div div.slidercontainer{
 	width: 20%;
-}
+}*/
