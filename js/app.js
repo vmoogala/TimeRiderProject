@@ -7,25 +7,26 @@
 //     output.innerHTML = this.value;
 // }
 function getHtmlStringForToolTip(d){
-	var html = '<div class="heading-tooltip"><p>Date: <b>' + '2009-01-28' +
-	'</b><br/><b>' + '10009: John Doe' +
-	'</b>, ' + 'male' + 
-	'<br/>Date of birth: ' + '1996-01-01' + 
+	var html = '<div class="heading-tooltip"><p>Date: <b>' + d.admission_date +
+	'</b><br/><b>' + d.patient_id + ': ' + d.patient_name +
+	'</b>, ' + d.gender + 
+	'<br/>Date of birth: ' + d.date_of_birth + 
 	'</p></div><div class="left-tooltip"><div><span class="header-text-tooltip">Biometric data</span><div class ="key-names-tooltip"> Body Mass Index <br/>Size[cm] <br/>Weight[kg] <br/>BP syst. [mmHg] <br/>BP diast. [mmHg] <br/>Smoker <br/></div><div class ="value-names-tooltip">' + 
-	'22.9' + ' <br/>' + '175'+' <br/>' + '70' + '<br/>' + '125' + '<br/>' + '80' + '<br/>' + 'X' + 
+	d.bmi + ' <br/>' + d.size+' <br/>' + d.weight + '<br/>' + d.bp_syst + '<br/>' + d.bp_diast + '<br/>' + d.smoker + 
 	'<br/></div></div><div><span class="header-text-tooltip">OAD therapy</span><div class ="key-names-tooltip">SH <br/>Met <br/>Glit <br/>DPP4 <br/>Acarb <br/></div><div class ="value-names-tooltip">' +  
-	'22.9' + ' <br/>' + '175'+' <br/>' + '70' + '<br/>' + '125' + '<br/>' + '80' + '<br/>' + 
+	d.sh + ' <br/>' + d.met +' <br/>' +d.glit  + '<br/>' + d.dpp4  + '<br/>' +d.acarb  + '<br/>' + 
 	'</div></div><div><span class="header-text-tooltip">Concomitant medication</span><div class ="key-names-tooltip">ACE <br/>Bbl <br/>BP Other <br/>Statin <br/>ASS <br/></div><div class ="value-names-tooltip">' + 
-	'22.9' + ' <br/>' + '175'+' <br/>' + '70' + '<br/>' + '125' + '<br/>' + '80' + '<br/>' + 
+	d.ace  + ' <br/>' + d.bbl +' <br/>' +d.bp_other  + '<br/>' + d.statin  + '<br/>' +d.ass  + '<br/>' + 
 	'</div></div></div><div class="right-tooltip"><div><span class="header-text-tooltip">Laboratory</span><div class ="key-names-tooltip">Blood sugar [mg/dl] <br/>HbA1c[%] <br/>Cholesterol [mg/dl] <br/>Triglyceride [mg/dl] <br/>Creatinine [mg/dl] <br/>Protein in urine <br/></div><div class ="value-names-tooltip">' + 
-	'246' + ' <br/>' + '10'+' <br/>' + '163' + '<br/>' + '72' + '<br/>' + '0.8' + '<br/>' + '' + 
+	d.blood_sugar  + ' <br/>' +d.hba1c +' <br/>' + d.cholesterol  + '<br/>' +d.triglyceride  + '<br/>' + d.creatinine  + '<br/>' + d.protein_in_urine + 
 	'<br/></div></div><div><span class="header-text-tooltip">Insulin therapy</span><div class ="key-names-tooltip">VZI <br/>ALT <br/>Misch <br/></div><div class ="value-names-tooltip">' + 
-	'' + '<br/>' + '' + '<br/>' + '' + '<br/>' + 
+	d.vzi + '<br/>' + d.alt + '<br/>' + d.misch + '<br/>' + 
 	'</div></div><div><span class="header-text-tooltip">Organ Damages</span><div class ="key-names-tooltip">Retinopathy <br/>Stroke <br/>Coronary Heart D. <br/>PAOD <br/>Polyneuropathy <br/>Nephropathie <br/></div><div class ="value-names-tooltip">' + 
-	'22.9' + ' <br/>' + '175'+' <br/>' + '70' + '<br/>' + '125' + '<br/>' + '80' + '<br/>' + '80' + 
+	d.retinopathy + ' <br/>' + d.stroke+' <br/>' + d.coronary_heart_d + '<br/>' + d.paod + '<br/>' + d.polyneuropathy + '<br/>' + d.nephropathie + 
 	'<br/></div></div></div>';
 	return html;
 }
+// 1:"admission_id" 31:"retinopathy"32:"stroke"33:"coronary_heart_d"34:"paod"35:"polyneuropathy"36:"nephropathie"
 /**
  **************************************************************************************
  **************************************************************************************
@@ -51,18 +52,12 @@ d3.json("/data/my_data.json", function(data) {
 });
 
 d3.csv("/data/TimeRider-Data.csv", function(data) {
-	chartProperties.data = data;
-	console.log(chartProperties.data);
+	drawChart(data);
 });
-
-console.log(chartProperties.data);
-d3.select("#tooltip1").style("visibility", "hidden")
-
 
 chartProperties.width = chartProperties.outerWidth - chartProperties.margin.left - chartProperties.margin.right;
 chartProperties.height = chartProperties.outerheight - chartProperties.margin.top - chartProperties.margin.bottom;
 
-// var data = [87, 34, 45, 67, 21, 94, 18];
 
 var svg = d3.select("#svg-div")
 	.append("svg")
@@ -124,33 +119,40 @@ var tooltip = d3.select("body").append("div")
 
 
 // Scatter points
-// svg.selectAll("circle")
-// 	.data(chartProperties.data)
-// 	.enter()
-// 	.append("circle")
-// 	.attr("class", "dot")
-// 	.attr("r", 5)
-// 	.attr("cx", function(d) {
-// 		console.log(+d.bmi);
-// 		return xScale(+d.bmi);
-// 	})
-// 	.attr("cy", function(d) {
-// 		return yScale(+d.hba1c);
-// 	});
-svg.append("circle")
+function drawChart(data){
+	chartProperties.data = data;
+	console.log(chartProperties.data);
+	svg.selectAll("circle")
+	.data(chartProperties.data)
+	.enter()
+	.append("circle")
+	.attr("class", "dot")
 	.attr("r", 5)
-	.attr("cx", 700)
-	.attr("cy", 90)
-	.on("mouseover", mouseover)
+	.attr("cx", function(d) {
+		console.log(+d.bmi*10);
+		return xScale(+d.bmi*10);
+	})
+	.attr("cy", function(d) {
+		return yScale(+d.hba1c*10);
+	})
+	// svg.append("circle")
+	// .attr("r", 5)
+	// .attr("cx", 700)
+	// .attr("cy", 90)
+	.on("mouseover", function(d){
+		// console.log(d);
+		mouseover(d);
+	})
 	.on("mouseout", mouseout);
+}
 
 function mouseover(d) {
-	console.log("mouseover");
+	// console.log("mouseover");
 	// tooltip.style("display", "inline");
-	tooltip.html(getHtmlStringForToolTip("x"))
+	tooltip.html(getHtmlStringForToolTip(d))
 		.style("left", (d3.event.pageX + 3) + "px")
 		.style("top", (d3.event.pageY + 3) + "px")
-		.style("display", "inline")
+		// .style("display", "inline")
 		.transition()
 		.duration(200) // ms
 		.style("opacity", .9);
@@ -165,7 +167,7 @@ function mouseover(d) {
 // }
 
 function mouseout() {
-	console.log("mouseout");
+	// console.log("mouseout");
 	// tooltip.style("display", "none")
 	tooltip
 	.transition()

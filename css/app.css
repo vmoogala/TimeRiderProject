@@ -26,6 +26,7 @@ html, body {
 
 svg {
 	border: 1px solid gray;
+	border-radius: 5px;
 }
 
 /**
@@ -38,6 +39,7 @@ svg {
 .top-most-row {
 	height: 40px;
 	border: 1px solid gray;
+	border-radius: 5px;
 }
 
 .top-row {
@@ -46,7 +48,8 @@ svg {
 
 .bottom-row {
 	height: 50px;
-	border: 1px solid black;
+	border: 1px solid gray;
+	border-radius: 5px;
 }
 
 .bottom-most-row {
@@ -54,31 +57,36 @@ svg {
 }
 
 .left-pane {
-	border: 1px solid black;/*height: 600px;*/
+	border: 1px solid gray;
+	border-radius: 5px;/*height: 600px;*/
 
 	/*margin: 5px 2px;*/
 }
 
 .right-pane {
-	border: 1px solid black;/*height: 600px;*/
+	border: 1px solid gray;
+	border-radius: 5px;/*height: 600px;*/
 
 	/*margin: 5px 2px;*/
 }
 
 .middle-pane {
-	border: 1px solid black;/*height: 600px;*/
+	border: 1px solid gray;
+	border-radius: 5px;/*height: 600px;*/
 
 	/*margin: 5px 2px;*/
 }
 
 .bottom-left-pane {
-	border: 1px solid black;/*height: 200px;	*/
+	border: 1px solid gray;
+	border-radius: 5px;/*height: 200px;	*/
 
 	/*margin: 5px 2px;*/
 }
 
 .bottom-right-pane {
-	border: 1px solid black;/*height: 200px;*/
+	border: 1px solid gray;
+	border-radius: 5px;/*height: 200px;*/
 
 	/*margin: 5px 2px;*/
 }
@@ -92,24 +100,28 @@ svg {
  */
 #y-axis-options {
 	margin-top: 20px;
-	border: 1px solid black;
+	border: 1px solid gray;
+	border-radius: 5px;
 	height: 200px;
 }
 
 #marks-options {
 	margin-top: 20px;
-	border: 1px solid black;
+	border: 1px solid gray;
+	border-radius: 5px;
 	height: 200px;
 }
 
 #filter-options {
 	margin-top: 20px;
-	border: 1px solid black;
+	border: 1px solid gray;
+	border-radius: 5px;
 }
 
 #stroke-options {
 	margin-top: 20px;
-	border: 1px solid black;
+	border: 1px solid gray;
+	border-radius: 5px;
 	height: 200px;
 }
 
@@ -123,6 +135,7 @@ svg {
 .tooltip1 {
 	margin-top: -20;
 	border: 1px solid gray;
+	border-radius: 5px;
 	width: 400px;
 	padding-left: 10px;
 	height: auto;
@@ -140,7 +153,10 @@ svg {
 }
 
 .heading-tooltip {
-	align-content: center;
+	text-align: center;
+	/*align-content: center;*/
+	/*margin-left: auto;*/
+	/*margin-right: auto;*/
 }
 
 .header-text-tooltip {
@@ -151,24 +167,28 @@ svg {
 .left-tooltip {
 	width: 50%;
 	float: left;
-	overflow: hidden;	/*border: 1px solid black;*/
+	overflow: hidden;	/*border: 1px solid gray;
+	border-radius: 5px;*/
 }
 
 .right-tooltip {
 	width: 50%;
 	float: left;
-	overflow: hidden;	/*border: 1px solid black;*/
+	overflow: hidden;	/*border: 1px solid gray;
+	border-radius: 5px;*/
 }
 
 .key-names-tooltip {
 	float: left;
 	overflow: hidden;
-	width: 75%;	/*border: 1px solid red;*/
+	width: 75%;	/*border: 1px solid red;*
+	border-radius: 5px;/
 }
 
 .value-names-tooltip {
 	width: 25%;
-	overflow: hidden;	/*border: 1px solid yellow;*/
+	overflow: hidden;	/*border: 1px solid yello
+	border-radius: 5px;w;*/
 }
 
 /**
@@ -195,6 +215,7 @@ svg {
 	transition: opacity .2s;
 	border-radius: 5px;
 }
+
 
 /* Mouse-over effects */
 .slider:hover {
