@@ -31,26 +31,26 @@
 					<div id="y-axis-options">
 						
 						<label for="select">Y-Axis</label>
-						<select id="select">
+						<select id="y-axis-options-select">
 							<option value="">HbA1c</option>
 							<option value="">Option 2</option>
 							<option value="">Option 3</option>
 						</select>
-						
+						<br/>
 						
 						<label>
-							<input type="checkbox" value="">
 							Ranges
 						</label>
+						<input type="checkbox" value="" id="y-axis-range-checkbox" onclick="yAxisRangeChecked()">
 						<br/>
 						
 						
 						<label for="input">upper threshold</label>
-						<input type="text" id="input" placeholder="6.0">
+						<input type="text" id="input-y-axis-upper-threshold" onblur="changeThresholdValue()" placeholder="6.0">
 						
 						
 						<label for="input">lower threshold</label>
-						<input type="text" id="input" placeholder="4.0">
+						<input type="text" id="input-y-axis-lower-threshold" placeholder="4.0">
 						<label>
 							<input type="checkbox" value="">
 							color risk ranges

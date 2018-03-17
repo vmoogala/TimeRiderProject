@@ -6,6 +6,25 @@
 // slider.oninput = function() {
 //     output.innerHTML = this.value;
 // }
+
+function changeThresholdValue(){
+	// console.log("entered onblur");
+	var x = document.getElementById("input-y-axis-upper-threshold");
+	console.log(x.value);
+	// console.log(d3.select('#input-y-axis-upper-threshold')[0].value);
+}
+
+function yAxisRangeChecked(){
+	console.log("entered yAxisRangeChecked");
+	var x = document.getElementById("y-axis-range-checkbox");
+	if(x.checked){
+		console.log("show divs");
+	}else{
+		console.log("hide divs");
+	}
+}
+
+
 function getHtmlStringForToolTip(d){
 	var html = '<div class="heading-tooltip"><p>Date: <b>' + d.admission_date +
 	'</b><br/><b>' + d.patient_id + ': ' + d.patient_name +
@@ -26,7 +45,7 @@ function getHtmlStringForToolTip(d){
 	'<br/></div></div></div>';
 	return html;
 }
-// 1:"admission_id" 31:"retinopathy"32:"stroke"33:"coronary_heart_d"34:"paod"35:"polyneuropathy"36:"nephropathie"
+
 /**
  **************************************************************************************
  **************************************************************************************
@@ -47,9 +66,9 @@ var chartProperties = {
 	data: []
 };
 
-d3.json("/data/my_data.json", function(data) {
-	chartProperties.data = data;
-});
+// d3.json("/data/my_data.json", function(data) {
+// 	chartProperties.data = data;
+// });
 
 d3.csv("/data/TimeRider-Data.csv", function(data) {
 	drawChart(data);
@@ -129,7 +148,10 @@ function drawChart(data){
 	.attr("class", "dot")
 	.attr("r", 5)
 	.attr("cx", function(d) {
-		console.log(+d.bmi*10);
+		// if(d.bmi == Nan){
+		// 	d.bmi = 0;
+		// }
+		console.log(+d.bmi*50);
 		return xScale(+d.bmi*10);
 	})
 	.attr("cy", function(d) {
@@ -174,16 +196,3 @@ function mouseout() {
 	.duration(200) // ms
 	.style("opacity", 0);;
 }
-
-
-// // Visual Encodings
-// svg.selectAll("circles")
-// 	.data(data)
-// 	.enter()
-// 	.append("circle")
-// 	.attr("cx", function(d) {
-// 		return scale(d);
-// 	})
-// 	.attr("cy", 100)
-// 	.attr("r", 5)
-// 	.attr("fill", "blue");
