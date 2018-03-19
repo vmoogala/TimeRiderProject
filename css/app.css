@@ -141,21 +141,25 @@ svg {
 	height: auto;
 	position: absolute;
 	background: white;
-	opacity: 0.9;
-  /*text-align: center;*/
-  /*width: 60px;
-  height: 12px;
-  padding: 8px;*/
-  /*margin-top: -20px;*/
-  /*font: 10px sans-serif;*/
-  /*background: #ddd;*/
-  pointer-events: none;
+	opacity: 0.9;  /*text-align: center;*/
+
+	/*width: 60px;
+	height: 12px;
+	padding: 8px;*/
+
+	/*margin-top: -20px;*/
+
+	/*font: 10px sans-serif;*/
+
+	/*background: #ddd;*/
+	pointer-events: none;
 }
 
 .heading-tooltip {
-	text-align: center;
-	/*align-content: center;*/
+	text-align: center;	/*align-content: center;*/
+
 	/*margin-left: auto;*/
+
 	/*margin-right: auto;*/
 }
 
@@ -183,9 +187,9 @@ svg {
 	overflow: hidden;
 	width: 75%;	/*border: 1px solid red;*
 	border-radius: 5px;/
-}
+	}
 
-.value-names-tooltip {
+	.value-names-tooltip {
 	width: 25%;
 	overflow: hidden;	/*border: 1px solid yello
 	border-radius: 5px;w;*/
@@ -215,7 +219,6 @@ svg {
 	transition: opacity .2s;
 	border-radius: 5px;
 }
-
 
 /* Mouse-over effects */
 .slider:hover {
@@ -254,7 +257,7 @@ svg {
 	stroke: #ddd;
 }
 
-#svg-div{
+#svg-div {
 	margin-top: 15px;
 }
 
@@ -276,6 +279,16 @@ svg {
 	margin: 0 auto
 }
 
+.x-axis-range-box {
+	opacity: 0.1;
+	fill: blue;
+}
+
+.y-axis-range-box {
+	opacity: 0.1;
+	fill: blue;
+}
+
 /*div.row div.col-md-3 .div div.slidercontainer{
-	width: 20%;
+width: 20%;
 }*/
