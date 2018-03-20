@@ -1,11 +1,20 @@
-// var slider = document.getElementById("myRange");
-// var output = document.getElementById("demo");
-// output.innerHTML = slider.value; // Display the default slider value
+var timeLineSlider = d3.select("#timeLineSlider");
+timeLineSlider.attr("min", 0)
+	.attr("max", 100)
+	.attr("value", 50)
+	.attr("step", 10)
+	.on("input", function() {
+		console.log(d3.event.target.value); // Display the default slider value
+		// document.getElementById("myRange").value = "0";
+	});
 
-// Update the current slider value (each time you drag the slider handle)
-// slider.oninput = function() {
-//     output.innerHTML = this.value;
+// var tempoSlider = document.getElementById("#tempoSlider");
+
+// // Update the current slider value (each time you drag the slider handle)
+// tempoSlider.oninput = function() {
+// 	console.log(tempoSlider.value); // Display the default slider value
 // }
+
 
 function changeThresholdValue() {
 	// console.log("entered onblur");
@@ -101,7 +110,9 @@ var chartProperties = {
 		bottom: 30,
 		left: 30
 	},
-	data: []
+	data: [],
+	xAxisCurrentValue: "bmi",
+	yAxisCurrentValue: "hba1c"
 };
 
 // d3.json("/data/my_data.json", function(data) {
@@ -109,7 +120,8 @@ var chartProperties = {
 // });
 
 d3.csv("/data/TimeRider-Data.csv", function(data) {
-	drawChart(data);
+	// drawChart(data);
+	beforeDrawingChart(data);
 });
 
 chartProperties.width = chartProperties.outerWidth - chartProperties.margin.left - chartProperties.margin.right;
@@ -175,6 +187,12 @@ var tooltip = d3.select("body").append("div")
 // .style("display", "none");
 
 
+// function xAxisValue(d, x){
+// 	return d[x]
+// }
+
+
+
 // Scatter points
 function drawChart(data) {
 	chartProperties.data = data;
@@ -186,19 +204,13 @@ function drawChart(data) {
 		.attr("class", "dot")
 		.attr("r", 5)
 		.attr("cx", function(d) {
-			// if(d.bmi == Nan){
-			// 	d.bmi = 0;
-			// }
-			console.log(+d.bmi * 50);
-			return xScale(+d.bmi * 10);
+			console.log(+d[chartProperties.xAxisCurrentValue] * 50);
+			return xScale(+d[chartProperties.xAxisCurrentValue] * 10);
 		})
 		.attr("cy", function(d) {
-			return yScale(+d.hba1c * 10);
+			console.log(+d[chartProperties.yAxisCurrentValue] * 50);
+			return yScale(+d[chartProperties.yAxisCurrentValue] * 10);
 		})
-		// svg.append("circle")
-		// .attr("r", 5)
-		// .attr("cx", 700)
-		// .attr("cy", 90)
 		.on("mouseover", function(d) {
 			// console.log(d);
 			// console.log("mouseover");
@@ -220,3 +232,15 @@ function drawChart(data) {
 				.style("opacity", 0);
 		});
 }
+var nestedDataByDate;
+function beforeDrawingChart(data){
+	console.log("beforeDrawingChart");
+	nestedDataByDate = d3.nest()
+		.key(function(d) {
+			// return d.visit_date;
+			return d.admission_start_date;
+		})
+		.entries(data);
+	console.log(nestedDataByDate[0].values);
+	drawChart(nestedDataByDate[0].values);
+};
