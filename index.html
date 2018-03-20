@@ -30,9 +30,9 @@
 					<div id="y-axis-options">
 						
 						<label for="select">Y-Axis</label>
-						<select id="y-axis-options-select">
-							<option value="">HbA1c</option>
-							<option value="">Option 2</option>
+						<select id="y-axis-options-select" onchange="yAxisOptionsChanged()">
+							<option value="hba1c">HbA1c</option>
+							<option value="blood_sugar">Blood Sugar</option>
 							<option value="">Option 3</option>
 						</select>
 						<br/>
@@ -127,8 +127,8 @@
 						Ranges
 					</label>
 					<label for="select">X-Axis</label>
-					<select id="select">
-						<option value="">Body Mass Index</option>
+					<select id="x-axis-options-select" onchange="xAxisOptionsChanged()">
+						<option value="bmi">Body Mass Index</option>
 						<option value="">Option 2</option>
 						<option value="">Option 3</option>
 					</select>
@@ -167,6 +167,10 @@
 							<div>
 								<div class="slidecontainer">
 									<input type="range" class="slider" id="timeLineSlider">
+								</div>
+							</div>
+							<div>
+								<div class="timeSvg" id="timeSvg">
 								</div>
 							</div>
 							<div class="media-buttons">

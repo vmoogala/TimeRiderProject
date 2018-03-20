@@ -15,6 +15,46 @@ timeLineSlider.attr("min", 0)
 // 	console.log(tempoSlider.value); // Display the default slider value
 // }
 
+function insertTimeLineAxis(){
+	// Reference: https://bl.ocks.org/d3noob/0e276dc70bb9184727ee47d6dd06e915
+	var svg = d3.select("#timeSvg")
+	.append("svg")
+	.attr("width", window.innerWidth/2)
+	.attr("height", 20);
+
+var x = d3.scaleTime().range([0, window.innerWidth/2]);
+data = ["2015-01-01", "2015-02-02", "2015-03-03"];
+x.domain("2015-01-01", "2015-03-03");
+
+  svg.append("g")
+      .attr("class", "axis")
+      .attr("transform", "translate(50," + 0 + ")")
+      .call(d3.axisBottom(x)
+              .tickFormat(d3.timeFormat("%Y-%m-%d")))
+      .selectAll("text")	
+        .style("text-anchor", "end")
+        .attr("dx", "-.8em")
+        .attr("dy", ".15em")
+        .attr("transform", "rotate(0)");
+}
+
+
+
+function yAxisOptionsChanged() {
+	console.log("entered yAxisOptionsChanged");
+	var value = document.getElementById("y-axis-options-select").value;
+	console.log(value);
+	chartProperties.yAxisCurrentValue = value;
+	drawChart(chartProperties.data);
+}
+
+function xAxisOptionsChanged() {
+	console.log("entered xAxisOptionsChanged");
+	var value = document.getElementById("x-axis-options-select").value;
+	console.log(value);
+	chartProperties.xAxisCurrentValue = value;
+	drawChart(chartProperties.data);
+}
 
 function changeThresholdValue() {
 	// console.log("entered onblur");
@@ -115,15 +155,6 @@ var chartProperties = {
 	yAxisCurrentValue: "hba1c"
 };
 
-// d3.json("/data/my_data.json", function(data) {
-// 	chartProperties.data = data;
-// });
-
-d3.csv("/data/TimeRider-Data.csv", function(data) {
-	// drawChart(data);
-	beforeDrawingChart(data);
-});
-
 chartProperties.width = chartProperties.outerWidth - chartProperties.margin.left - chartProperties.margin.right;
 chartProperties.height = chartProperties.outerheight - chartProperties.margin.top - chartProperties.margin.bottom;
 
@@ -191,17 +222,31 @@ var tooltip = d3.select("body").append("div")
 // 	return d[x]
 // }
 
+// d3.json("/data/my_data.json", function(data) {
+// 	chartProperties.data = data;
+// });
+insertTimeLineAxis();
 
+d3.csv("/data/TimeRider-Data.csv", function(data) {
+	// drawChart(data);
+	beforeDrawingChart(data);
+});
 
 // Scatter points
 function drawChart(data) {
+	console.log("entered drawChart");
+	console.log(chartProperties.xAxisCurrentValue);
+	console.log(chartProperties.yAxisCurrentValue);
 	chartProperties.data = data;
 	console.log(chartProperties.data);
-	svg.selectAll("circle")
-		.data(chartProperties.data)
-		.enter()
-		.append("circle")
-		.attr("class", "dot")
+
+	var circles = svg.selectAll("circle")
+		.data(chartProperties.data);
+
+	circles.enter()
+		.append("circle");
+
+	circles.attr("class", "dot")
 		.attr("r", 5)
 		.attr("cx", function(d) {
 			console.log(+d[chartProperties.xAxisCurrentValue] * 50);
@@ -231,9 +276,11 @@ function drawChart(data) {
 				.duration(200) // ms
 				.style("opacity", 0);
 		});
+
 }
 var nestedDataByDate;
-function beforeDrawingChart(data){
+
+function beforeDrawingChart(data) {
 	console.log("beforeDrawingChart");
 	nestedDataByDate = d3.nest()
 		.key(function(d) {
@@ -242,5 +289,7 @@ function beforeDrawingChart(data){
 		})
 		.entries(data);
 	console.log(nestedDataByDate[0].values);
-	drawChart(nestedDataByDate[0].values);
+	chartProperties.data = nestedDataByDate[0].values;
+	// Date d = new Date(nestedDataByDate[0].key);
+	drawChart(chartProperties.data);
 };
