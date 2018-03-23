@@ -44,7 +44,7 @@ function insertTimeLineAxis() {
 ////////////////////////////////////////////////////////////////////
 
 var mediaControls = {
-	mediaIsPlaying : false
+	mediaIsPlaying: false
 };
 
 mediaControls.mediaClicked = function(mediaImg) {
@@ -58,11 +58,11 @@ mediaControls.mediaClicked = function(mediaImg) {
 			break;
 		case "mediaPlayPause":
 			console.log("mediaPlayPause");
-			if(mediaControls.mediaIsPlaying){
-				$( "#mediaPlayPause" ).attr("src", "images/ic_pause_black_24dp_2x.png");
+			if (mediaControls.mediaIsPlaying) {
+				$("#mediaPlayPause").attr("src", "images/ic_pause_black_24dp_2x.png");
 				mediaControls.mediaIsPlaying = false;
-			}else{
-				$( "#mediaPlayPause" ).attr("src", "images/ic_play_arrow_black_24dp_2x.png");
+			} else {
+				$("#mediaPlayPause").attr("src", "images/ic_play_arrow_black_24dp_2x.png");
 				mediaControls.mediaIsPlaying = true;
 			}
 			break;
@@ -78,10 +78,18 @@ mediaControls.mediaClicked = function(mediaImg) {
 ////////////////////////////////////////////////////////////////////
 // Zoom Controls
 ////////////////////////////////////////////////////////////////////
-var zoomControls ={};
+var zoomControls = {};
 
-zoomControls.zoomClicked(ZoomImg){
-
+zoomControls.zoomClicked = function(zoomImg) {
+	console.log("mediaClicked with id ->" + zoomImg.id);
+	switch (zoomImg.id) {
+		case "zoom-in-image":
+			console.log("zoom-in-image");
+			break;
+		case "zoom-out-image":
+			console.log("zoom-out-image");
+			break;
+	}
 };
 
 

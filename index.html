@@ -118,8 +118,10 @@
 					<label>
 						Zoom options
 					</label>
-					<img class="zoom-in-out-images" src="images/increase-zoom-button.svg"></img>
-					<img class="zoom-in-out-images" src="images/decrease-zoom.svg"></img>
+					<img class="zoom-in-out-images" src="images/increase-zoom-button.svg"
+					id="zoom-in-image" onclick="zoomControls.zoomClicked(this)"></img>
+					<img class="zoom-in-out-images" src="images/decrease-zoom.svg"
+					id="zoom-out-image" onclick="zoomControls.zoomClicked(this)"></img>
 				</div>
 				<div class="col-md-3" >
 					<label>
@@ -177,7 +179,7 @@
 								<img class="media-button-images" src="images/ic_skip_previous_black_24dp_2x.png"
 								id = "mediaFastRewind" onclick="mediaControls.mediaClicked(this)"></img>
 								<img class="media-button-images" src="images/ic_fast_rewind_black_24dp_2x.png"
-								id = "mediaRewind" onclick="mediaControls.mediaClicked(this)"></img>								
+								id = "mediaRewind" onclick="mediaControls.mediaClicked(this)"></img>
 								<img class="media-button-images" src="images/ic_play_arrow_black_24dp_2x.png"
 								id = "mediaPlayPause" onclick="mediaControls.mediaClicked(this)"></img>
 								<img class="media-button-images" src="images/ic_fast_forward_black_24dp_2x.png"
