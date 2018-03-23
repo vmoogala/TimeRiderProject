@@ -273,6 +273,11 @@ svg {
 	height: 25px;
 }
 
+.media-button-images{
+	width: 25px;
+	height: 25px;	
+}
+
 .media-buttons {
 	width: 180px;
 	float: none;

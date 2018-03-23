@@ -8,36 +8,81 @@ timeLineSlider.attr("min", 0)
 		// document.getElementById("myRange").value = "0";
 	});
 
-// var tempoSlider = document.getElementById("#tempoSlider");
+var tempoSlider = document.getElementById("tempoSlider");
 
-// // Update the current slider value (each time you drag the slider handle)
-// tempoSlider.oninput = function() {
-// 	console.log(tempoSlider.value); // Display the default slider value
-// }
-
-function insertTimeLineAxis(){
-	// Reference: https://bl.ocks.org/d3noob/0e276dc70bb9184727ee47d6dd06e915
-	var svg = d3.select("#timeSvg")
-	.append("svg")
-	.attr("width", window.innerWidth/2)
-	.attr("height", 20);
-
-var x = d3.scaleTime().range([0, window.innerWidth/2]);
-data = ["2015-01-01", "2015-02-02", "2015-03-03"];
-x.domain("2015-01-01", "2015-03-03");
-
-  svg.append("g")
-      .attr("class", "axis")
-      .attr("transform", "translate(50," + 0 + ")")
-      .call(d3.axisBottom(x)
-              .tickFormat(d3.timeFormat("%Y-%m-%d")))
-      .selectAll("text")	
-        .style("text-anchor", "end")
-        .attr("dx", "-.8em")
-        .attr("dy", ".15em")
-        .attr("transform", "rotate(0)");
+// Update the current slider value (each time you drag the slider handle)
+tempoSlider.oninput = function() {
+	console.log(tempoSlider.value); // Display the default slider value
 }
 
+function insertTimeLineAxis() {
+	// Reference: https://bl.ocks.org/d3noob/0e276dc70bb9184727ee47d6dd06e915
+	var svg = d3.select("#timeSvg")
+		.append("svg")
+		.attr("width", window.innerWidth / 2)
+		.attr("height", 20);
+
+	var x = d3.scaleTime().range([0, window.innerWidth / 2]);
+	data = ["2015-01-01", "2015-02-02", "2015-03-03"];
+	x.domain("2015-01-01", "2015-03-03");
+
+	svg.append("g")
+		.attr("class", "axis")
+		.attr("transform", "translate(50," + 0 + ")")
+		.call(d3.axisBottom(x)
+			.tickFormat(d3.timeFormat("%Y-%m-%d")))
+		.selectAll("text")
+		.style("text-anchor", "end")
+		.attr("dx", "-.8em")
+		.attr("dy", ".15em")
+		.attr("transform", "rotate(0)");
+}
+
+
+////////////////////////////////////////////////////////////////////
+// mediaControls
+////////////////////////////////////////////////////////////////////
+
+var mediaControls = {
+	mediaIsPlaying : false
+};
+
+mediaControls.mediaClicked = function(mediaImg) {
+	console.log("mediaClicked with id ->" + mediaImg.id);
+	switch (mediaImg.id) {
+		case "mediaFastRewind":
+			console.log("mediaFastRewind");
+			break;
+		case "mediaRewind":
+			console.log("mediaRewind");
+			break;
+		case "mediaPlayPause":
+			console.log("mediaPlayPause");
+			if(mediaControls.mediaIsPlaying){
+				$( "#mediaPlayPause" ).attr("src", "images/ic_pause_black_24dp_2x.png");
+				mediaControls.mediaIsPlaying = false;
+			}else{
+				$( "#mediaPlayPause" ).attr("src", "images/ic_play_arrow_black_24dp_2x.png");
+				mediaControls.mediaIsPlaying = true;
+			}
+			break;
+		case "mediaForward":
+			console.log("mediaForward");
+			break;
+		case "mediaFastForward":
+			console.log("mediaFastForward");
+			break;
+	}
+};
+
+////////////////////////////////////////////////////////////////////
+// Zoom Controls
+////////////////////////////////////////////////////////////////////
+var zoomControls ={};
+
+zoomControls.zoomClicked(ZoomImg){
+
+};
 
 
 function yAxisOptionsChanged() {
@@ -113,7 +158,7 @@ function showRangesForXaxis(minX, maxX) {
 
 
 function getHtmlStringForToolTip(d) {
-	var html = '<div class="heading-tooltip"><p>Date: <b>' + d.admission_date +
+	var html = '<div class="heading-tooltip"><p>Date: <b>' + d.visit_date +
 		'</b><br/><b>' + d.patient_id + ': ' + d.patient_name +
 		'</b>, ' + d.gender +
 		'<br/>Date of birth: ' + d.date_of_birth +
@@ -158,6 +203,15 @@ var chartProperties = {
 chartProperties.width = chartProperties.outerWidth - chartProperties.margin.left - chartProperties.margin.right;
 chartProperties.height = chartProperties.outerheight - chartProperties.margin.top - chartProperties.margin.bottom;
 
+// var zoom = d3.zoom()
+// 	.scaleExtent([1, 10])
+// 	.on("zoom", zoomed);
+
+// function zoomed() {
+// 	// svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+// 	svg.attr('transform', 'translate(' + d3.event.transform.x + ',' + d3.event.transform.y + ') scale(' + d3.event.transform.k + ')');
+
+// }
 
 var svg = d3.select("#svg-div")
 	.append("svg")
@@ -165,6 +219,7 @@ var svg = d3.select("#svg-div")
 	.attr("height", chartProperties.height + chartProperties.margin.top + chartProperties.margin.bottom)
 	.append("g")
 	.attr("transform", "translate(" + chartProperties.margin.left + "," + chartProperties.margin.top + ")");
+// .call(zoom);
 
 // Scale
 var xScale = d3.scaleLinear()
@@ -218,6 +273,7 @@ var tooltip = d3.select("body").append("div")
 // .style("display", "none");
 
 
+
 // function xAxisValue(d, x){
 // 	return d[x]
 // }
@@ -244,10 +300,10 @@ function drawChart(data) {
 		.data(chartProperties.data);
 
 	circles.enter()
-		.append("circle");
+		.append("circle")
+		.attr("r", 5);
 
 	circles.attr("class", "dot")
-		.attr("r", 5)
 		.attr("cx", function(d) {
 			console.log(+d[chartProperties.xAxisCurrentValue] * 50);
 			return xScale(+d[chartProperties.xAxisCurrentValue] * 10);
@@ -276,6 +332,8 @@ function drawChart(data) {
 				.duration(200) // ms
 				.style("opacity", 0);
 		});
+
+	circles.exit().remove();
 
 }
 var nestedDataByDate;
