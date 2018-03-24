@@ -1,3 +1,16 @@
+var colors = {
+	LIGHT_GREEN: "#006D2C",
+	LIGHT_PINK: "#770174",
+	BLACK: "#000000"
+};
+
+var circleRadius = {
+	SMALL: "3px",
+	MEDIUM: "5px",
+	LARGE: "8px"
+}
+
+
 var timeLineSlider = d3.select("#timeLineSlider");
 timeLineSlider.attr("min", 0)
 	.attr("max", 100)
@@ -92,10 +105,42 @@ zoomControls.zoomClicked = function(zoomImg) {
 	}
 };
 
+////////////////////////////////////////////////////////////////////
+// Marks Controls
+////////////////////////////////////////////////////////////////////
+var marksControls = {
+	colorOption: "none",
+	shapeOption: "none",
+	sizeOption: "none"
+};
 
+marksControls.colorOptionsChanged = function() {
+	console.log("entered marksControls.colorOptionsChanged");
+	marksControls.colorOption = $('#marks-options-colors').val();
+	console.log(marksControls.colorOption);
+	drawChart(chartProperties.data);
+};
+
+marksControls.shapeOptionsChanged = function() {
+	console.log("entered marksControls.shapeOptionsChanged");
+	marksControls.shapeOption = $('#marks-options-shape').val();
+	console.log(marksControls.shapeOption);
+};
+
+marksControls.sizeOptionsChanged = function() {
+	console.log("entered marksControls.sizeOptionsChanged");
+	marksControls.sizeOption = $('#marks-options-size').val();
+	console.log(marksControls.sizeOption);
+	drawChart(chartProperties.data);
+};
+
+
+////////////////////////////////////////////////////////////////////
+// Axis Controls
+////////////////////////////////////////////////////////////////////
 function yAxisOptionsChanged() {
 	console.log("entered yAxisOptionsChanged");
-	var value = document.getElementById("y-axis-options-select").value;
+	var value = $('#y-axis-options-select').val();
 	console.log(value);
 	chartProperties.yAxisCurrentValue = value;
 	drawChart(chartProperties.data);
@@ -103,11 +148,12 @@ function yAxisOptionsChanged() {
 
 function xAxisOptionsChanged() {
 	console.log("entered xAxisOptionsChanged");
-	var value = document.getElementById("x-axis-options-select").value;
+	var value = $('#x-axis-options-select').val();
 	console.log(value);
 	chartProperties.xAxisCurrentValue = value;
 	drawChart(chartProperties.data);
 }
+
 
 function changeThresholdValue() {
 	// console.log("entered onblur");
@@ -164,6 +210,10 @@ function showRangesForXaxis(minX, maxX) {
 		.attr("class", "x-axis-range-box")
 }
 
+
+////////////////////////////////////////////////////////////////////
+// Tooltip code
+////////////////////////////////////////////////////////////////////
 
 function getHtmlStringForToolTip(d) {
 	var html = '<div class="heading-tooltip"><p>Date: <b>' + d.visit_date +
@@ -319,6 +369,54 @@ function drawChart(data) {
 		.attr("cy", function(d) {
 			console.log(+d[chartProperties.yAxisCurrentValue] * 50);
 			return yScale(+d[chartProperties.yAxisCurrentValue] * 10);
+		})
+		.attr("r", function(d) {
+			var size;
+			if (marksControls.sizeOption != "none") {
+				switch (marksControls.sizeOption) {
+					case "smoker":
+						if (d.smoker == "Yes") {
+							size = circleRadius.LARGE;
+						} else {
+							size = circleRadius.SMALL;
+						}
+						break;
+					case "gender":
+						if (d.gender == "Male") {
+							size = circleRadius.SMALL;
+						} else {
+							size = circleRadius.LARGE;
+						}
+						break;
+				}
+				return size;
+			} else {
+				return circleRadius.MEDIUM;
+			}
+		})
+		.attr("fill", function(d) {
+			var color;
+			if (marksControls.colorOption != "none") {
+				switch (marksControls.colorOption) {
+					case "smoker":
+						if (d.smoker == "Yes") {
+							color = colors.LIGHT_PINK
+						} else {
+							color = colors.LIGHT_GREEN
+						}
+						break;
+					case "gender":
+						if (d.gender == "Male") {
+							color = colors.LIGHT_PINK
+						} else {
+							color = colors.LIGHT_GREEN
+						}
+						break;
+				}
+				return color;
+			} else {
+				return colors.BLACK;
+			}
 		})
 		.on("mouseover", function(d) {
 			// console.log(d);

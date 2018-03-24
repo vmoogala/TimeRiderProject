@@ -58,25 +58,38 @@
 					<div id="marks-options">
 						<h5>Marks</h5>
 						<label for="select">Color</label>
-						<select id="select">
-							<option value="">Smoker</option>
-							<option value="">Option 2</option>
-							<option value="">Option 3</option>
+						<select id="marks-options-colors" onchange="marksControls.colorOptionsChanged()">
+							<option value="none">None</option>
+							<option value="smoker">Smoker</option>
+							<option value="gender">Gender</option>
+							<option value="stroke">Stroke</option>
 						</select>
 						<br/>
+						<div class="marks-options-colors">
+							
+						</div>
 						<label for="select">Shape</label>
-						<select id="select">
-							<option value="">Option 1</option>
-							<option value="">Option 2</option>
-							<option value="">Option 3</option>
+						<select id="marks-options-shape" onchange="marksControls.shapeOptionsChanged()">
+							<option value="none">None</option>
+							<option value="smoker">Smoker</option>
+							<option value="gender">Gender</option>
+							<option value="stroke">Stroke</option>
 						</select>
 						<br/>
+						<div class="marks-options-shape">
+							
+						</div>
 						<label for="select">Size</label>
-						<select id="select">
-							<option value="">Option 1</option>
-							<option value="">Option 2</option>
-							<option value="">Option 3</option>
+						<select id="marks-options-size" onchange="marksControls.sizeOptionsChanged()">
+							<option value="none">None</option>
+							<option value="smoker">Smoker</option>
+							<option value="gender">Gender</option>
+							<option value="stroke">Stroke</option>
 						</select>
+						<br/>
+						<div class="marks-options-size">
+							
+						</div>
 					</div>
 				</div>
 				<div class="col-md-8 middle-pane">
