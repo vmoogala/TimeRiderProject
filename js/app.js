@@ -246,24 +246,46 @@ tooltipFunctions.onMouseOut = function() {
 		.style("opacity", 0);
 }
 
-tooltipFunctions.getHtmlStringForToolTip = function(d) {
-	var html = '<div class="heading-tooltip"><p>Date: <b>' + d.visit_date +
-		'</b><br/><b>' + d.patient_id + ': ' + d.patient_name +
-		'</b>, ' + d.gender +
-		'<br/>Date of birth: ' + d.date_of_birth +
+tooltipFunctions.getHtmlStringForToolTip = function(d_in) {
+	// To Create a new object without reference to previous object using jquery's extend method
+	var d = {};
+	$.extend(d,d_in);
+
+	// To show 'X' when a value is true, '' when false, '?' when null
+	function temp(x) {
+		for (i = 0; i < x.length; i++) {
+			console.log(x.length);
+			if (d[x[i]] == 'T') {
+				d[x[i]] = 'X';
+			} else if (d[x[i]] == 'F') {
+				d[x[i]] = "";
+			} else {
+				d[x[i]] = "?";
+			}
+		}
+		// console.log(d);
+	}
+
+	temp(["Nikotin", "SH", "Met", "Glit", "DPP4", "Acarb", "ACE", "Bbl", "RR_sonst", "Statin", "ASS", "Protein_in_urine", "VZI", "ALT", "Misch", "Retinopathie", "Insult", "KHK", "PAVK", "PNP", "Nephropathie"]);
+
+	var html = '<div class="heading-tooltip"><p>Date: <b>' + d.Date +
+		'</b><br/><b>' + d.ID + ': ' + d.Name +
+		'</b>, ' + d.Gender +
+		'<br/>Date of birth: ' + d.Birthday +
 		'</p></div><div class="left-tooltip"><div><span class="header-text-tooltip">Biometric data</span><div class ="key-names-tooltip"> Body Mass Index <br/>Size[cm] <br/>Weight[kg] <br/>BP syst. [mmHg] <br/>BP diast. [mmHg] <br/>Smoker <br/></div><div class ="value-names-tooltip">' +
-		d.bmi + ' <br/>' + d.size + ' <br/>' + d.weight + '<br/>' + d.bp_syst + '<br/>' + d.bp_diast + '<br/>' + d.smoker +
+		d.BMI + ' <br/>' + d.Size + ' <br/>' + d.Weight + '<br/>' + d.RR_syst + '<br/>' + d.RR_diast + '<br/>' + d.Nikotin +
 		'<br/></div></div><div><span class="header-text-tooltip">OAD therapy</span><div class ="key-names-tooltip">SH <br/>Met <br/>Glit <br/>DPP4 <br/>Acarb <br/></div><div class ="value-names-tooltip">' +
-		d.sh + ' <br/>' + d.met + ' <br/>' + d.glit + '<br/>' + d.dpp4 + '<br/>' + d.acarb + '<br/>' +
+		d.SH + ' <br/>' + d.Met + ' <br/>' + d.Glit + '<br/>' + d.DPP4 + '<br/>' + d.Acarb + '<br/>' +
 		'</div></div><div><span class="header-text-tooltip">Concomitant medication</span><div class ="key-names-tooltip">ACE <br/>Bbl <br/>BP Other <br/>Statin <br/>ASS <br/></div><div class ="value-names-tooltip">' +
-		d.ace + ' <br/>' + d.bbl + ' <br/>' + d.bp_other + '<br/>' + d.statin + '<br/>' + d.ass + '<br/>' +
+		d.ACE + ' <br/>' + d.Bbl + ' <br/>' + d.RR_sonst + '<br/>' + d.Statin + '<br/>' + d.ASS + '<br/>' +
 		'</div></div></div><div class="right-tooltip"><div><span class="header-text-tooltip">Laboratory</span><div class ="key-names-tooltip">Blood sugar [mg/dl] <br/>HbA1c[%] <br/>Cholesterol [mg/dl] <br/>Triglyceride [mg/dl] <br/>Creatinine [mg/dl] <br/>Protein in urine <br/></div><div class ="value-names-tooltip">' +
-		d.blood_sugar + ' <br/>' + d.hba1c + ' <br/>' + d.cholesterol + '<br/>' + d.triglyceride + '<br/>' + d.creatinine + '<br/>' + d.protein_in_urine +
+		d.NBZ + ' <br/>' + d.HbA1c + ' <br/>' + d.Chol + '<br/>' + d.TG + '<br/>' + d.Crea + '<br/>' + d.Protein_in_urine +
 		'<br/></div></div><div><span class="header-text-tooltip">Insulin therapy</span><div class ="key-names-tooltip">VZI <br/>ALT <br/>Misch <br/></div><div class ="value-names-tooltip">' +
-		d.vzi + '<br/>' + d.alt + '<br/>' + d.misch + '<br/>' +
+		d.VZI + '<br/>' + d.ALT + '<br/>' + d.Misch + '<br/>' +
 		'</div></div><div><span class="header-text-tooltip">Organ Damages</span><div class ="key-names-tooltip">Retinopathy <br/>Stroke <br/>Coronary Heart D. <br/>PAOD <br/>Polyneuropathy <br/>Nephropathie <br/></div><div class ="value-names-tooltip">' +
-		d.retinopathy + ' <br/>' + d.stroke + ' <br/>' + d.coronary_heart_d + '<br/>' + d.paod + '<br/>' + d.polyneuropathy + '<br/>' + d.nephropathie +
+		d.Retinopathie + ' <br/>' + d.Insult + ' <br/>' + d.KHK + '<br/>' + d.PAVK + '<br/>' + d.PNP + '<br/>' + d.Nephropathie +
 		'<br/></div></div></div>';
+		
 	return html;
 }
 
@@ -422,11 +444,11 @@ function drawChart(data) {
 
 	circles.attr("class", "dot")
 		.attr("cx", function(d) {
-			console.log(+d[chartProperties.xAxisCurrentValue]);
+			// console.log(+d[chartProperties.xAxisCurrentValue]);
 			return xScale(+d[chartProperties.xAxisCurrentValue]);
 		})
 		.attr("cy", function(d) {
-			console.log(+d[chartProperties.yAxisCurrentValue]);
+			// console.log(+d[chartProperties.yAxisCurrentValue]);
 			return yScale(+d[chartProperties.yAxisCurrentValue]);
 		})
 		.attr("r", function(d) {
@@ -487,11 +509,11 @@ function drawChart(data) {
 
 	squares.attr("class", "dot")
 		.attr("x", function(d) {
-			console.log(+d[chartProperties.xAxisCurrentValue] * 50) - 5;
+			// console.log(+d[chartProperties.xAxisCurrentValue] * 50) - 5;
 			return xScale(+d[chartProperties.xAxisCurrentValue] * 10) - 5;
 		})
 		.attr("y", function(d) {
-			console.log(+d[chartProperties.yAxisCurrentValue] * 50) - 5;
+			// console.log(+d[chartProperties.yAxisCurrentValue] * 50) - 5;
 			return yScale(+d[chartProperties.yAxisCurrentValue] * 10) - 5;
 		})
 		.attr("height", function(d) {
