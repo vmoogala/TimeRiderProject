@@ -222,8 +222,31 @@ function showRangesForXaxis(minX, maxX) {
 ////////////////////////////////////////////////////////////////////
 // Tooltip code
 ////////////////////////////////////////////////////////////////////
+var tooltipFunctions = {};
 
-function getHtmlStringForToolTip(d) {
+tooltipFunctions.onMouseOver = function(d) {
+	// console.log(d);
+	console.log("mouseover");
+	// tooltip.style("display", "inline");
+	tooltip.html(tooltipFunctions.getHtmlStringForToolTip(d))
+		.style("left", (d3.event.pageX + 3) + "px")
+		.style("top", (d3.event.pageY + 3) + "px")
+		// .style("display", "inline")
+		.transition()
+		.duration(200) // ms
+		.style("opacity", .9);
+}
+
+tooltipFunctions.onMouseOut = function() {
+	console.log("mouseout");
+	// tooltip.style("display", "none")
+	tooltip
+		.transition()
+		.duration(200) // ms
+		.style("opacity", 0);
+}
+
+tooltipFunctions.getHtmlStringForToolTip = function(d) {
 	var html = '<div class="heading-tooltip"><p>Date: <b>' + d.visit_date +
 		'</b><br/><b>' + d.patient_id + ': ' + d.patient_name +
 		'</b>, ' + d.gender +
@@ -422,7 +445,7 @@ function drawChart(data) {
 		.on("mouseover", function(d) {
 			tooltipFunctions.onMouseOver(d)
 		})
-		.on("mouseout", tooltipFunctions.onMouseOut());
+		.on("mouseout", tooltipFunctions.onMouseOut);
 
 	circles.exit().remove();
 
@@ -455,7 +478,7 @@ function drawChart(data) {
 		.on("mouseover", function(d) {
 			tooltipFunctions.onMouseOver(d)
 		})
-		.on("mouseout", tooltipFunctions.onMouseOut());
+		.on("mouseout", tooltipFunctions.onMouseOut);
 
 	squares.exit().remove();
 
@@ -475,30 +498,6 @@ function beforeDrawingChart(data) {
 	// Date d = new Date(nestedDataByDate[0].key);
 	drawChart(chartProperties.data);
 };
-
-var tooltipFunctions = {};
-
-tooltipFunctions.onMouseOver = function(d) {
-	// console.log(d);
-	// console.log("mouseover");
-	// tooltip.style("display", "inline");
-	tooltip.html(getHtmlStringForToolTip(d))
-		.style("left", (d3.event.pageX + 3) + "px")
-		.style("top", (d3.event.pageY + 3) + "px")
-		// .style("display", "inline")
-		.transition()
-		.duration(200) // ms
-		.style("opacity", .9);
-}
-
-tooltipFunctions.onMouseOut = function() {
-	// console.log("mouseout");
-	// tooltip.style("display", "none")
-	tooltip
-		.transition()
-		.duration(200) // ms
-		.style("opacity", 0);
-}
 
 var marksFunctions = {};
 
