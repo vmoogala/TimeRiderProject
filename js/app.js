@@ -431,8 +431,8 @@ function drawChart(data) {
 
 	squares.enter()
 		.append("rect")
-		.attr("height", squareSize.SMALL)
-		.attr("width", squareSize.SMALL);
+		.attr("height", squareSize.ZERO)
+		.attr("width", squareSize.ZERO);
 
 	squares.attr("class", "dot")
 		.attr("x", function(d) {
@@ -443,12 +443,12 @@ function drawChart(data) {
 			console.log(+d[chartProperties.yAxisCurrentValue] * 50) - 5;
 			return yScale(+d[chartProperties.yAxisCurrentValue] * 10) - 5;
 		})
-		// .attr("height", function(d) {
-		// 	return marksFunctions.sizeOptions(d);
-		// })
-		// .attr("width", function(d) {
-		// 	return marksFunctions.sizeOptions(d);
-		// })
+		.attr("height", function(d) {
+			return marksFunctions.sizeOptions(d);
+		})
+		.attr("width", function(d) {
+			return marksFunctions.sizeOptions(d);
+		})
 		.attr("fill", function(d) {
 			return marksFunctions.fillOptions(d);
 		})
@@ -528,41 +528,36 @@ marksFunctions.fillOptions = function(d) {
 }
 
 marksFunctions.sizeOptions = function(d) {
-	var size;
+	var size = squareSize.ZERO;
 	if (marksControls.shapeOption != "none") {
 		switch (marksControls.shapeOption) {
 			case "smoker":
 				if (d.smoker == "Yes") {
-					return squareSize.SMALL;
+					size = squareSize.SMALL;
 				}
 				break;
 			case "gender":
-				if (d.gender == "Male") {
-					return squareSize.SMALL;
+				if (d.gender == "Female") {
+					size = squareSize.SMALL;
 				}
 				break;
 		}
 	}
-	if (marksControls.sizeOption != "none") {
-		switch (marksControls.sizeOption) {
+
+	if(size == squareSize.SMALL && marksControls.sizeOption != "none"){
+		switch (marksControls.shapeOption) {
 			case "smoker":
 				if (d.smoker == "Yes") {
 					size = squareSize.LARGE;
-				} else {
-					size = squareSize.SMALL;
 				}
 				break;
 			case "gender":
-				if (d.gender == "Male") {
-					size = squareSize.SMALL;
-				} else {
+				if (d.gender == "Female") {
 					size = squareSize.LARGE;
 				}
 				break;
 		}
-		return size;
-	} else {
-		return squareSize.SMALL;
 	}
 
+	return size;
 }
