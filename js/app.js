@@ -7,7 +7,14 @@ var colors = {
 var circleRadius = {
 	SMALL: "3px",
 	MEDIUM: "5px",
-	LARGE: "8px"
+	LARGE: "8px",
+	ZERO: "0px"
+}
+
+var squareSize = {
+	SMALL: "10px",
+	LARGE: "16px",
+	ZERO: "0px"
 }
 
 
@@ -125,6 +132,7 @@ marksControls.shapeOptionsChanged = function() {
 	console.log("entered marksControls.shapeOptionsChanged");
 	marksControls.shapeOption = $('#marks-options-shape').val();
 	console.log(marksControls.shapeOption);
+	drawChart(chartProperties.data);
 };
 
 marksControls.sizeOptionsChanged = function() {
@@ -372,6 +380,20 @@ function drawChart(data) {
 		})
 		.attr("r", function(d) {
 			var size;
+			if (marksControls.shapeOption != "none") {
+				switch (marksControls.shapeOption) {
+					case "smoker":
+						if (d.smoker == "Yes") {
+							return circleRadius.ZERO;
+						}
+						break;
+					case "gender":
+						if (d.gender == "Male") {
+							return circleRadius.ZERO;
+						}
+						break;
+				}
+			}
 			if (marksControls.sizeOption != "none") {
 				switch (marksControls.sizeOption) {
 					case "smoker":
@@ -395,51 +417,47 @@ function drawChart(data) {
 			}
 		})
 		.attr("fill", function(d) {
-			var color;
-			if (marksControls.colorOption != "none") {
-				switch (marksControls.colorOption) {
-					case "smoker":
-						if (d.smoker == "Yes") {
-							color = colors.LIGHT_PINK
-						} else {
-							color = colors.LIGHT_GREEN
-						}
-						break;
-					case "gender":
-						if (d.gender == "Male") {
-							color = colors.LIGHT_PINK
-						} else {
-							color = colors.LIGHT_GREEN
-						}
-						break;
-				}
-				return color;
-			} else {
-				return colors.BLACK;
-			}
+			return marksFunctions.fillOptions(d);
 		})
 		.on("mouseover", function(d) {
-			// console.log(d);
-			// console.log("mouseover");
-			// tooltip.style("display", "inline");
-			tooltip.html(getHtmlStringForToolTip(d))
-				.style("left", (d3.event.pageX + 3) + "px")
-				.style("top", (d3.event.pageY + 3) + "px")
-				// .style("display", "inline")
-				.transition()
-				.duration(200) // ms
-				.style("opacity", .9);
+			tooltipFunctions.onMouseOver(d)
 		})
-		.on("mouseout", function() {
-			// console.log("mouseout");
-			// tooltip.style("display", "none")
-			tooltip
-				.transition()
-				.duration(200) // ms
-				.style("opacity", 0);
-		});
+		.on("mouseout", tooltipFunctions.onMouseOut());
 
 	circles.exit().remove();
+
+	var squares = svg.selectAll("rect")
+		.data(chartProperties.data);
+
+	squares.enter()
+		.append("rect")
+		.attr("height", squareSize.SMALL)
+		.attr("width", squareSize.SMALL);
+
+	squares.attr("class", "dot")
+		.attr("x", function(d) {
+			console.log(+d[chartProperties.xAxisCurrentValue] * 50) - 5;
+			return xScale(+d[chartProperties.xAxisCurrentValue] * 10) - 5;
+		})
+		.attr("y", function(d) {
+			console.log(+d[chartProperties.yAxisCurrentValue] * 50) - 5;
+			return yScale(+d[chartProperties.yAxisCurrentValue] * 10) - 5;
+		})
+		// .attr("height", function(d) {
+		// 	return marksFunctions.sizeOptions(d);
+		// })
+		// .attr("width", function(d) {
+		// 	return marksFunctions.sizeOptions(d);
+		// })
+		.attr("fill", function(d) {
+			return marksFunctions.fillOptions(d);
+		})
+		.on("mouseover", function(d) {
+			tooltipFunctions.onMouseOver(d)
+		})
+		.on("mouseout", tooltipFunctions.onMouseOut());
+
+	squares.exit().remove();
 
 }
 var nestedDataByDate;
@@ -457,3 +475,94 @@ function beforeDrawingChart(data) {
 	// Date d = new Date(nestedDataByDate[0].key);
 	drawChart(chartProperties.data);
 };
+
+var tooltipFunctions = {};
+
+tooltipFunctions.onMouseOver = function(d) {
+	// console.log(d);
+	// console.log("mouseover");
+	// tooltip.style("display", "inline");
+	tooltip.html(getHtmlStringForToolTip(d))
+		.style("left", (d3.event.pageX + 3) + "px")
+		.style("top", (d3.event.pageY + 3) + "px")
+		// .style("display", "inline")
+		.transition()
+		.duration(200) // ms
+		.style("opacity", .9);
+}
+
+tooltipFunctions.onMouseOut = function() {
+	// console.log("mouseout");
+	// tooltip.style("display", "none")
+	tooltip
+		.transition()
+		.duration(200) // ms
+		.style("opacity", 0);
+}
+
+var marksFunctions = {};
+
+marksFunctions.fillOptions = function(d) {
+	var color;
+	if (marksControls.colorOption != "none") {
+		switch (marksControls.colorOption) {
+			case "smoker":
+				if (d.smoker == "Yes") {
+					color = colors.LIGHT_PINK
+				} else {
+					color = colors.LIGHT_GREEN
+				}
+				break;
+			case "gender":
+				if (d.gender == "Male") {
+					color = colors.LIGHT_PINK
+				} else {
+					color = colors.LIGHT_GREEN
+				}
+				break;
+		}
+		return color;
+	} else {
+		return colors.BLACK;
+	}
+}
+
+marksFunctions.sizeOptions = function(d) {
+	var size;
+	if (marksControls.shapeOption != "none") {
+		switch (marksControls.shapeOption) {
+			case "smoker":
+				if (d.smoker == "Yes") {
+					return squareSize.SMALL;
+				}
+				break;
+			case "gender":
+				if (d.gender == "Male") {
+					return squareSize.SMALL;
+				}
+				break;
+		}
+	}
+	if (marksControls.sizeOption != "none") {
+		switch (marksControls.sizeOption) {
+			case "smoker":
+				if (d.smoker == "Yes") {
+					size = squareSize.LARGE;
+				} else {
+					size = squareSize.SMALL;
+				}
+				break;
+			case "gender":
+				if (d.gender == "Male") {
+					size = squareSize.SMALL;
+				} else {
+					size = squareSize.LARGE;
+				}
+				break;
+		}
+		return size;
+	} else {
+		return squareSize.SMALL;
+	}
+
+}
