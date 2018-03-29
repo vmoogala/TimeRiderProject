@@ -285,8 +285,8 @@ var chartProperties = {
 		left: 30
 	},
 	data: [],
-	xAxisCurrentValue: "bmi",
-	yAxisCurrentValue: "hba1c"
+	xAxisCurrentValue: "BMI",
+	yAxisCurrentValue: "HbA1c"
 };
 
 chartProperties.width = chartProperties.outerWidth - chartProperties.margin.left - chartProperties.margin.right;
@@ -327,11 +327,11 @@ var xAxis = d3.axisBottom()
 var yAxis = d3.axisLeft()
 	.scale(yScale);
 
-svg.append("g")
+var xAxisGroup = svg.append("g")
 	.attr("transform", "translate(" + 0 + "," + chartProperties.height + ")")
 	.call(xAxis);
 
-svg.append("g")
+var yAxisGroup = svg.append("g")
 	.attr("transform", "translate(" + 0 + "," + 0 + ")")
 	.call(yAxis);
 
@@ -346,11 +346,11 @@ var xgridlines = d3.axisLeft()
 	.tickSize(-chartProperties.width)
 	.scale(yScale);
 
-svg.append("g")
+var ygridlinesGroup = svg.append("g")
 	.attr("class", "grid")
 	.call(ygridlines);
 
-svg.append("g")
+var xgridlinesGroup = svg.append("g")
 	.attr("class", "grid")
 	.call(xgridlines);
 
@@ -372,10 +372,24 @@ var tooltip = d3.select("body").append("div")
 // });
 insertTimeLineAxis();
 
-d3.csv("/data/TimeRider-Data.csv", function(data) {
+d3.csv("/data/TimeRiderDataFinal.csv", type, function(data) {
 	// drawChart(data);
 	beforeDrawingChart(data);
 });
+
+function type(d) {
+	d.Size = +d.Size || 0;
+	d.Weight = +d.Weight || 0;
+	d.BMI = +d.BMI || 0;
+	d.NBZ = +d.NBZ || 0;
+	d.HbA1c = +d.HbA1c || 0;
+	d.Chol = +d.Chol || 0;
+	d.TG = +d.TG || 0;
+	d.Crea = +d.Crea || 0;
+	d.RR_syst = +d.RR_syst || 0;
+	d.RR_diast = +d.RR_diast || 0;
+	return d;
+}
 
 // Scatter points
 function drawChart(data) {
@@ -384,6 +398,20 @@ function drawChart(data) {
 	console.log(chartProperties.yAxisCurrentValue);
 	chartProperties.data = data;
 	console.log(chartProperties.data);
+
+	xScale.domain(d3.extent(data, function(d) {
+		return d[chartProperties.xAxisCurrentValue];
+	}));
+
+	yScale.domain(d3.extent(data, function(d) {
+		return d[chartProperties.yAxisCurrentValue];
+	}).reverse());
+
+	// Axis
+	xAxisGroup.transition().call(xAxis);
+	yAxisGroup.transition().call(yAxis);
+	ygridlinesGroup.transition().call(ygridlines);
+	xgridlinesGroup.transition().call(xgridlines);
 
 	var circles = svg.selectAll("circle")
 		.data(chartProperties.data);
@@ -394,12 +422,12 @@ function drawChart(data) {
 
 	circles.attr("class", "dot")
 		.attr("cx", function(d) {
-			console.log(+d[chartProperties.xAxisCurrentValue] * 50);
-			return xScale(+d[chartProperties.xAxisCurrentValue] * 10);
+			console.log(+d[chartProperties.xAxisCurrentValue]);
+			return xScale(+d[chartProperties.xAxisCurrentValue]);
 		})
 		.attr("cy", function(d) {
-			console.log(+d[chartProperties.yAxisCurrentValue] * 50);
-			return yScale(+d[chartProperties.yAxisCurrentValue] * 10);
+			console.log(+d[chartProperties.yAxisCurrentValue]);
+			return yScale(+d[chartProperties.yAxisCurrentValue]);
 		})
 		.attr("r", function(d) {
 			var size;
@@ -543,7 +571,7 @@ marksFunctions.sizeOptions = function(d) {
 		}
 	}
 
-	if(size == squareSize.SMALL && marksControls.sizeOption != "none"){
+	if (size == squareSize.SMALL && marksControls.sizeOption != "none") {
 		switch (marksControls.shapeOption) {
 			case "smoker":
 				if (d.smoker == "Yes") {

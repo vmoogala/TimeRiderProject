@@ -9,3 +9,7 @@ https://bl.ocks.org/wadefagen/ce5d308d8080130de10f21254273e30c
 https://bl.ocks.org/mbostock/1087001
 
 http://bl.ocks.org/williaster/af5b855651ffe29bdca1
+
+https://stackoverflow.com/questions/7540397/convert-nan-to-0-in-javascript
+
+http://bl.ocks.org/WilliamQLiu/59c87d2bcc00800ec3f9
