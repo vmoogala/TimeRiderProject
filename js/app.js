@@ -457,13 +457,16 @@ function setDateOptionsForSlider(min_date, max_date) {
 		.attr("max", total_days - 1)
 		.attr("value", 0)
 		.attr("step", 1)
-		.on("input", timeSliderOptionChanged);
+		.on("input", function(){
+			// console.log(+this.value);
+			timeSliderOptionChanged(+this.value)
+		});
 }
 
 
-function timeSliderOptionChanged() {
+function timeSliderOptionChanged(x) {
 	// console.log(d3.event.target.value); // Display the default slider value
-	var d = chartProperties.days[d3.event.target.value];
+	var d = chartProperties.days[x];
 	// console.log(d.toISOString().substring(0, 10));
 	$("#sliderDateIndicatorText").text("Currently Visible Time:" + d.toISOString().substring(0, 10));
 	for (i = 0; i < nestedDataByDate.length; i++) {
@@ -475,6 +478,21 @@ function timeSliderOptionChanged() {
 			break;
 		}
 	}
+}
+
+function playAutomatically() {
+	temp = 0;
+	temp_max = chartProperties.days.length - 1;
+	var x = window.setInterval(function() {
+		if(temp<temp_max){
+			$('#timeLineSlider').val(temp);
+			timeSliderOptionChanged(temp);
+			temp = temp + 1;	
+		}else{
+			clearInterval(x)
+		}
+	}, 50);
+
 }
 
 
