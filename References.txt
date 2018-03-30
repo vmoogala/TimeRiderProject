@@ -13,3 +13,10 @@ http://bl.ocks.org/williaster/af5b855651ffe29bdca1
 https://stackoverflow.com/questions/7540397/convert-nan-to-0-in-javascript
 
 http://bl.ocks.org/WilliamQLiu/59c87d2bcc00800ec3f9
+
+
+https://stackoverflow.com/questions/923885/capture-html-canvas-as-gif-jpg-png-pdf
+
+http://html2canvas.hertzen.com/
+
+https://github.com/niklasvh/html2canvas/

@@ -19,14 +19,6 @@ var squareSize = {
 
 
 var timeLineSlider = d3.select("#timeLineSlider");
-timeLineSlider.attr("min", 0)
-	.attr("max", 100)
-	.attr("value", 50)
-	.attr("step", 10)
-	.on("input", function() {
-		console.log(d3.event.target.value); // Display the default slider value
-		// document.getElementById("myRange").value = "0";
-	});
 
 var tempoSlider = document.getElementById("tempoSlider");
 
@@ -58,6 +50,19 @@ function insertTimeLineAxis() {
 		.attr("transform", "rotate(0)");
 }
 
+////////////////////////////////////////////////////////////////////
+// ScreenShot
+////////////////////////////////////////////////////////////////////
+function takeScreenShot() {
+	html2canvas(document.body).then(function(canvas) {
+		// document.body.appendChild(canvas);
+		// var img = canvas.toDataURL("image/png");
+		var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream"); //Convert image to 'octet-stream' (Just a download, really)
+		window.location.href = image;
+		// console.log(img);
+		// document.write('<img src="'+image+'"/>');
+	});
+}
 
 ////////////////////////////////////////////////////////////////////
 // mediaControls
@@ -105,6 +110,7 @@ zoomControls.zoomClicked = function(zoomImg) {
 	switch (zoomImg.id) {
 		case "zoom-in-image":
 			console.log("zoom-in-image");
+			takeScreenShot();
 			break;
 		case "zoom-out-image":
 			console.log("zoom-out-image");
@@ -162,14 +168,12 @@ function xAxisOptionsChanged() {
 	drawChart(chartProperties.data);
 }
 
-
 function changeThresholdValue() {
 	// console.log("entered onblur");
 	var x = document.getElementById("input-y-axis-upper-threshold");
 	console.log(x.value);
 	// console.log(d3.select('#input-y-axis-upper-threshold')[0].value);
 }
-
 
 function yAxisRangeChecked() {
 	console.log("entered yAxisRangeChecked");
@@ -249,7 +253,7 @@ tooltipFunctions.onMouseOut = function() {
 tooltipFunctions.getHtmlStringForToolTip = function(d_in) {
 	// To Create a new object without reference to previous object using jquery's extend method
 	var d = {};
-	$.extend(d,d_in);
+	$.extend(d, d_in);
 
 	// To show 'X' when a value is true, '' when false, '?' when null
 	function temp(x) {
@@ -285,7 +289,7 @@ tooltipFunctions.getHtmlStringForToolTip = function(d_in) {
 		'</div></div><div><span class="header-text-tooltip">Organ Damages</span><div class ="key-names-tooltip">Retinopathy <br/>Stroke <br/>Coronary Heart D. <br/>PAOD <br/>Polyneuropathy <br/>Nephropathie <br/></div><div class ="value-names-tooltip">' +
 		d.Retinopathie + ' <br/>' + d.Insult + ' <br/>' + d.KHK + '<br/>' + d.PAVK + '<br/>' + d.PNP + '<br/>' + d.Nephropathie +
 		'<br/></div></div></div>';
-		
+
 	return html;
 }
 
@@ -341,7 +345,6 @@ var yScale = d3.scaleLinear()
 	.domain([100, 0])
 	.range([0, chartProperties.height]);
 
-
 // Axis
 var xAxis = d3.axisBottom()
 	.scale(xScale);
@@ -392,7 +395,7 @@ var tooltip = d3.select("body").append("div")
 // d3.json("/data/my_data.json", function(data) {
 // 	chartProperties.data = data;
 // });
-insertTimeLineAxis();
+// insertTimeLineAxis();
 
 d3.csv("/data/TimeRiderDataFinal.csv", type, function(data) {
 	// drawChart(data);
@@ -412,6 +415,68 @@ function type(d) {
 	d.RR_diast = +d.RR_diast || 0;
 	return d;
 }
+
+var nestedDataByDate;
+
+function beforeDrawingChart(data) {
+	console.log("beforeDrawingChart");
+
+	nestedDataByDate = d3.nest()
+		.key(function(d) {
+			return d.Date;
+		})
+		.entries(data);
+
+	console.log(nestedDataByDate);
+	chartProperties.dateArray = [];
+	for (i = 0; i < nestedDataByDate.length; i++) {
+		chartProperties.dateArray.push(nestedDataByDate[i].key);
+		// console.log(nestedDataByDate[i].key);
+	}
+	chartProperties.dateArray = chartProperties.dateArray.sort();
+	// console.log(chartProperties.dateArray);
+
+	setDateOptionsForSlider(chartProperties.dateArray[0], chartProperties.dateArray[chartProperties.dateArray.length - 1]);
+
+	// console.log(nestedDataByDate[0].values);
+	// chartProperties.data = nestedDataByDate[0].values;
+	// Date d = new Date(nestedDataByDate[0].key);
+	// drawChart(chartProperties.data);
+	drawChart(nestedDataByDate[0].values);
+};
+
+function setDateOptionsForSlider(min_date, max_date) {
+	console.log(min_date, max_date);
+	chartProperties.days = d3.timeDay.range(new Date(min_date), new Date(max_date));
+	total_days = chartProperties.days.length;
+	// console.log(chartProperties.days);
+	// console.log(total_days);
+	$("#sliderDateIndicatorText").text("Currently Visible Time:" + new Date(min_date).toISOString().substring(0, 10));
+
+	timeLineSlider.attr("min", 0)
+		.attr("max", total_days - 1)
+		.attr("value", 0)
+		.attr("step", 1)
+		.on("input", timeSliderOptionChanged);
+}
+
+
+function timeSliderOptionChanged() {
+	// console.log(d3.event.target.value); // Display the default slider value
+	var d = chartProperties.days[d3.event.target.value];
+	// console.log(d.toISOString().substring(0, 10));
+	$("#sliderDateIndicatorText").text("Currently Visible Time:" + d.toISOString().substring(0, 10));
+	for (i = 0; i < nestedDataByDate.length; i++) {
+		if (nestedDataByDate[i].key == d.toISOString().substring(0, 10)) {
+			// console.log(d.toISOString().substring(0, 10));
+			// console.log(nestedDataByDate[i].values);
+			chartProperties.data = nestedDataByDate[i].values;
+			drawChart(chartProperties.data);
+			break;
+		}
+	}
+}
+
 
 // Scatter points
 function drawChart(data) {
@@ -533,21 +598,6 @@ function drawChart(data) {
 	squares.exit().remove();
 
 }
-var nestedDataByDate;
-
-function beforeDrawingChart(data) {
-	console.log("beforeDrawingChart");
-	nestedDataByDate = d3.nest()
-		.key(function(d) {
-			// return d.visit_date;
-			return d.admission_start_date;
-		})
-		.entries(data);
-	console.log(nestedDataByDate[0].values);
-	chartProperties.data = nestedDataByDate[0].values;
-	// Date d = new Date(nestedDataByDate[0].key);
-	drawChart(chartProperties.data);
-};
 
 var marksFunctions = {};
 
