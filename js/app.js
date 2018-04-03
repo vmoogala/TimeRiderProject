@@ -1,3 +1,12 @@
+/*
+ *****************************************************************************
+ *****************************************************************************
+ *
+ * Global Constants
+ *
+ *****************************************************************************
+ *****************************************************************************
+ */
 var colors = {
 	LIGHT_GREEN: "#006D2C",
 	LIGHT_PINK: "#770174",
@@ -18,41 +27,34 @@ var squareSize = {
 }
 
 
+/*
+ *****************************************************************************
+ *****************************************************************************
+ *
+ * Sliders functionality
+ *
+ *****************************************************************************
+ *****************************************************************************
+ */
 var timeLineSlider = d3.select("#timeLineSlider");
 
 var tempoSlider = document.getElementById("tempoSlider");
 
 // Update the current slider value (each time you drag the slider handle)
 tempoSlider.oninput = function() {
-	console.log(tempoSlider.value); // Display the default slider value
+	console.log(tempoSlider.value);
 }
 
-function insertTimeLineAxis() {
-	// Reference: https://bl.ocks.org/d3noob/0e276dc70bb9184727ee47d6dd06e915
-	var svg = d3.select("#timeSvg")
-		.append("svg")
-		.attr("width", window.innerWidth / 2)
-		.attr("height", 20);
 
-	var x = d3.scaleTime().range([0, window.innerWidth / 2]);
-	data = ["2015-01-01", "2015-02-02", "2015-03-03"];
-	x.domain("2015-01-01", "2015-03-03");
-
-	svg.append("g")
-		.attr("class", "axis")
-		.attr("transform", "translate(50," + 0 + ")")
-		.call(d3.axisBottom(x)
-			.tickFormat(d3.timeFormat("%Y-%m-%d")))
-		.selectAll("text")
-		.style("text-anchor", "end")
-		.attr("dx", "-.8em")
-		.attr("dy", ".15em")
-		.attr("transform", "rotate(0)");
-}
-
-////////////////////////////////////////////////////////////////////
-// ScreenShot
-////////////////////////////////////////////////////////////////////
+/*
+ *****************************************************************************
+ *****************************************************************************
+ *
+ * ScreenShot functionality
+ *
+ *****************************************************************************
+ *****************************************************************************
+ */
 function takeScreenShot() {
 	html2canvas(document.body).then(function(canvas) {
 		// document.body.appendChild(canvas);
@@ -64,10 +66,16 @@ function takeScreenShot() {
 	});
 }
 
-////////////////////////////////////////////////////////////////////
-// mediaControls
-////////////////////////////////////////////////////////////////////
 
+/*
+ *****************************************************************************
+ *****************************************************************************
+ *
+ * Media Buttons functionality
+ *
+ *****************************************************************************
+ *****************************************************************************
+ */
 var mediaControls = {
 	mediaIsPlaying: false
 };
@@ -85,6 +93,7 @@ mediaControls.mediaClicked = function(mediaImg) {
 			console.log("mediaPlayPause");
 			if (mediaControls.mediaIsPlaying) {
 				$("#mediaPlayPause").attr("src", "images/ic_pause_black_24dp_2x.png");
+				mediaControls.playAutomatically();
 				mediaControls.mediaIsPlaying = false;
 			} else {
 				$("#mediaPlayPause").attr("src", "images/ic_play_arrow_black_24dp_2x.png");
@@ -100,9 +109,32 @@ mediaControls.mediaClicked = function(mediaImg) {
 	}
 };
 
-////////////////////////////////////////////////////////////////////
-// Zoom Controls
-////////////////////////////////////////////////////////////////////
+
+mediaControls.playAutomatically = function() {
+	temp = 0;
+	temp_max = chartProperties.days.length - 1;
+	var x = window.setInterval(function() {
+		if (temp < temp_max) {
+			$('#timeLineSlider').val(temp);
+			timeSliderOptionChanged(temp);
+			temp = temp + 1;
+		} else {
+			clearInterval(x)
+		}
+	}, 50);
+
+}
+
+
+/*
+ *****************************************************************************
+ *****************************************************************************
+ *
+ * Zoom Controls
+ *
+ *****************************************************************************
+ *****************************************************************************
+ */
 var zoomControls = {};
 
 zoomControls.zoomClicked = function(zoomImg) {
@@ -118,9 +150,16 @@ zoomControls.zoomClicked = function(zoomImg) {
 	}
 };
 
-////////////////////////////////////////////////////////////////////
-// Marks Controls
-////////////////////////////////////////////////////////////////////
+
+/*
+ *****************************************************************************
+ *****************************************************************************
+ *
+ * Marks Controls
+ *
+ *****************************************************************************
+ *****************************************************************************
+ */
 var marksControls = {
 	colorOption: "none",
 	shapeOption: "none",
@@ -149,22 +188,44 @@ marksControls.sizeOptionsChanged = function() {
 };
 
 
-////////////////////////////////////////////////////////////////////
-// Axis Controls
-////////////////////////////////////////////////////////////////////
-function yAxisOptionsChanged() {
+/*
+ *****************************************************************************
+ *****************************************************************************
+ *
+ * Axis Controls
+ *
+ *****************************************************************************
+ *****************************************************************************
+ */
+var axisControls = {};
+
+axisControls.yAxisOptionsChanged = function() {
 	console.log("entered yAxisOptionsChanged");
 	var value = $('#y-axis-options-select').val();
 	console.log(value);
 	chartProperties.yAxisCurrentValue = value;
+
+	yScale.domain(d3.extent(chartProperties.mainData, function(d) {
+		return d[chartProperties.yAxisCurrentValue];
+	}).reverse());
+
+	yAxisGroup.transition().call(yAxis);
+	ygridlinesGroup.transition().call(ygridlines);
 	drawChart(chartProperties.data);
 }
 
-function xAxisOptionsChanged() {
+axisControls.xAxisOptionsChanged = function() {
 	console.log("entered xAxisOptionsChanged");
 	var value = $('#x-axis-options-select').val();
 	console.log(value);
 	chartProperties.xAxisCurrentValue = value;
+
+	xScale.domain(d3.extent(chartProperties.mainData, function(d) {
+		return d[chartProperties.xAxisCurrentValue];
+	}));
+
+	xAxisGroup.transition().call(xAxis);
+	xgridlinesGroup.transition().call(xgridlines);
 	drawChart(chartProperties.data);
 }
 
@@ -175,19 +236,19 @@ function changeThresholdValue() {
 	// console.log(d3.select('#input-y-axis-upper-threshold')[0].value);
 }
 
-function yAxisRangeChecked() {
+axisControls.yAxisRangeChecked = function() {
 	console.log("entered yAxisRangeChecked");
 	var x = document.getElementById("y-axis-range-checkbox");
 	if (x.checked) {
 		console.log("show divs");
-		showRangesForYaxis(0, 0);
+		axisControls.showRangesForYaxis(0, 0);
 	} else {
 		console.log("hide divs");
 	}
 }
 
 
-function showRangesForYaxis(minY, maxY) {
+axisControls.showRangesForYaxis = function(minY, maxY) {
 	console.log("entered showRangesForYaxis");
 	var yAxisRangeBox = svg.append("g")
 	yAxisRangeBox.append("rect")
@@ -205,7 +266,7 @@ function showRangesForYaxis(minY, maxY) {
 }
 
 
-function showRangesForXaxis(minX, maxX) {
+axisControls.showRangesForXaxis = function(minX, maxX) {
 	console.log("entered showRangesForXaxis");
 	var xAxisRangeBox = svg.append("g")
 	xAxisRangeBox.append("rect")
@@ -223,9 +284,15 @@ function showRangesForXaxis(minX, maxX) {
 }
 
 
-////////////////////////////////////////////////////////////////////
-// Tooltip code
-////////////////////////////////////////////////////////////////////
+/*
+ *****************************************************************************
+ *****************************************************************************
+ *
+ * Tooltip related functions
+ *
+ *****************************************************************************
+ *****************************************************************************
+ */
 var tooltipFunctions = {};
 
 tooltipFunctions.onMouseOver = function(d) {
@@ -237,9 +304,11 @@ tooltipFunctions.onMouseOver = function(d) {
 		.style("top", (d3.event.pageY + 3) + "px")
 		// .style("display", "inline")
 		.transition()
-		.duration(200) // ms
+		.duration(200) // in ms
 		.style("opacity", .9);
+	// tooltipFunctions.appendLineChart(d);
 }
+
 
 tooltipFunctions.onMouseOut = function() {
 	console.log("mouseout");
@@ -250,12 +319,13 @@ tooltipFunctions.onMouseOut = function() {
 		.style("opacity", 0);
 }
 
+//Forming a html string to show the popup
 tooltipFunctions.getHtmlStringForToolTip = function(d_in) {
 	// To Create a new object without reference to previous object using jquery's extend method
 	var d = {};
 	$.extend(d, d_in);
 
-	// To show 'X' when a value is true, '' when false, '?' when null
+	// To show 'X' when a value is true, '' when false, '?' when null in popup
 	function temp(x) {
 		for (i = 0; i < x.length; i++) {
 			console.log(x.length);
@@ -293,10 +363,38 @@ tooltipFunctions.getHtmlStringForToolTip = function(d_in) {
 	return html;
 }
 
+tooltipFunctions.appendLineChart = function(d) {
+	var lineChartGroup = svg.append("g");
+	console.log("current data -->", d);
+	var currentPatientId = d.ID;
+
+	var line = d3.line()
+		.x(function(d) {
+			return xScale(d[chartProperties.xAxisCurrentValue]);
+		})
+		.y(function(d) {
+			return yScale(d[chartProperties.yAxisCurrentValue]);
+		});
+
+	lineChartGroup.append("path")
+		.datum(chartProperties.mainData)
+		.filter(function(d) {
+			return d.ID = currentPatientId;
+		})
+		.attr("fill", "none")
+		.attr("stroke", "steelblue")
+		.attr("stroke-linejoin", "round")
+		.attr("stroke-linecap", "round")
+		.attr("stroke-width", 1.5)
+		.attr("d", line);
+}
+
 /**
  **************************************************************************************
  **************************************************************************************
+ *
  *  Chart Code
+ *
  **************************************************************************************
  **************************************************************************************
  */
@@ -311,6 +409,7 @@ var chartProperties = {
 		left: 30
 	},
 	data: [],
+	nestedDataByDate: [],
 	xAxisCurrentValue: "BMI",
 	yAxisCurrentValue: "HbA1c"
 };
@@ -387,18 +486,9 @@ var tooltip = d3.select("body").append("div")
 // .style("display", "none");
 
 
-
-// function xAxisValue(d, x){
-// 	return d[x]
-// }
-
-// d3.json("/data/my_data.json", function(data) {
-// 	chartProperties.data = data;
-// });
-// insertTimeLineAxis();
-
 d3.csv("/data/TimeRiderDataFinal.csv", type, function(data) {
 	// drawChart(data);
+	chartProperties.mainData = data;
 	beforeDrawingChart(data);
 });
 
@@ -416,33 +506,48 @@ function type(d) {
 	return d;
 }
 
-var nestedDataByDate;
 
 function beforeDrawingChart(data) {
 	console.log("beforeDrawingChart");
 
-	nestedDataByDate = d3.nest()
+	xScale.domain(d3.extent(chartProperties.mainData, function(d) {
+		return d[chartProperties.xAxisCurrentValue];
+	}));
+
+	yScale.domain(d3.extent(chartProperties.mainData, function(d) {
+		return d[chartProperties.yAxisCurrentValue];
+	}).reverse());
+
+	// Axis
+	xAxisGroup.transition().call(xAxis);
+	yAxisGroup.transition().call(yAxis);
+	ygridlinesGroup.transition().call(ygridlines);
+	xgridlinesGroup.transition().call(xgridlines);
+
+
+	chartProperties.nestedDataByDate = d3.nest()
 		.key(function(d) {
 			return d.Date;
 		})
 		.entries(data);
 
-	console.log(nestedDataByDate);
+	console.log(chartProperties.nestedDataByDate);
 	chartProperties.dateArray = [];
-	for (i = 0; i < nestedDataByDate.length; i++) {
-		chartProperties.dateArray.push(nestedDataByDate[i].key);
-		// console.log(nestedDataByDate[i].key);
+	for (i = 0; i < chartProperties.nestedDataByDate.length; i++) {
+		chartProperties.dateArray.push(chartProperties.nestedDataByDate[i].key);
+		// console.log(chartProperties.nestedDataByDate[i].key);
 	}
 	chartProperties.dateArray = chartProperties.dateArray.sort();
 	// console.log(chartProperties.dateArray);
 
 	setDateOptionsForSlider(chartProperties.dateArray[0], chartProperties.dateArray[chartProperties.dateArray.length - 1]);
 
-	// console.log(nestedDataByDate[0].values);
-	// chartProperties.data = nestedDataByDate[0].values;
-	// Date d = new Date(nestedDataByDate[0].key);
+	// console.log(chartProperties.nestedDataByDate[0].values);
+	chartProperties.data = chartProperties.nestedDataByDate[0].values;
+	// Date d = new Date(chartProperties.nestedDataByDate[0].key);
 	// drawChart(chartProperties.data);
-	drawChart(nestedDataByDate[0].values);
+	drawChart(chartProperties.nestedDataByDate[0].values);
+	drawChart(chartProperties.nestedDataByDate[0].values);
 };
 
 function setDateOptionsForSlider(min_date, max_date) {
@@ -457,7 +562,7 @@ function setDateOptionsForSlider(min_date, max_date) {
 		.attr("max", total_days - 1)
 		.attr("value", 0)
 		.attr("step", 1)
-		.on("input", function(){
+		.on("input", function() {
 			// console.log(+this.value);
 			timeSliderOptionChanged(+this.value)
 		});
@@ -469,32 +574,16 @@ function timeSliderOptionChanged(x) {
 	var d = chartProperties.days[x];
 	// console.log(d.toISOString().substring(0, 10));
 	$("#sliderDateIndicatorText").text("Currently Visible Time:" + d.toISOString().substring(0, 10));
-	for (i = 0; i < nestedDataByDate.length; i++) {
-		if (nestedDataByDate[i].key == d.toISOString().substring(0, 10)) {
+	for (i = 0; i < chartProperties.nestedDataByDate.length; i++) {
+		if (chartProperties.nestedDataByDate[i].key == d.toISOString().substring(0, 10)) {
 			// console.log(d.toISOString().substring(0, 10));
-			// console.log(nestedDataByDate[i].values);
-			chartProperties.data = nestedDataByDate[i].values;
+			// console.log(chartProperties.nestedDataByDate[i].values);
+			chartProperties.data = chartProperties.nestedDataByDate[i].values;
 			drawChart(chartProperties.data);
 			break;
 		}
 	}
 }
-
-function playAutomatically() {
-	temp = 0;
-	temp_max = chartProperties.days.length - 1;
-	var x = window.setInterval(function() {
-		if(temp<temp_max){
-			$('#timeLineSlider').val(temp);
-			timeSliderOptionChanged(temp);
-			temp = temp + 1;	
-		}else{
-			clearInterval(x)
-		}
-	}, 50);
-
-}
-
 
 // Scatter points
 function drawChart(data) {
@@ -504,17 +593,6 @@ function drawChart(data) {
 	chartProperties.data = data;
 	console.log(chartProperties.data);
 
-	xScale.domain(d3.extent(data, function(d) {
-		return d[chartProperties.xAxisCurrentValue];
-	}));
-
-	yScale.domain(d3.extent(data, function(d) {
-		return d[chartProperties.yAxisCurrentValue];
-	}).reverse());
-
-	// Axis
-	xAxisGroup.transition().call(xAxis);
-	yAxisGroup.transition().call(yAxis);
 	ygridlinesGroup.transition().call(ygridlines);
 	xgridlinesGroup.transition().call(xgridlines);
 

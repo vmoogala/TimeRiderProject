@@ -30,7 +30,7 @@
 					<div id="y-axis-options">
 						
 						<label for="select">Y-Axis</label>
-						<select id="y-axis-options-select" onchange="yAxisOptionsChanged()">
+						<select id="y-axis-options-select" onchange="axisControls.yAxisOptionsChanged()">
 							<option value="HbA1c">HbA1c[%]</option>
 							<option value="NBZ">Blood Sugar[mg/dl]</option>
 							<option value="BMI">Body Mass Index</option>
@@ -47,7 +47,7 @@
 						<label>
 							Ranges
 						</label>
-						<input type="checkbox" value="" id="y-axis-range-checkbox" onclick="yAxisRangeChecked()">
+						<input type="checkbox" value="" id="y-axis-range-checkbox" onclick="axisControls.yAxisRangeChecked()">
 						<br/>
 						
 						
@@ -149,7 +149,7 @@
 						Ranges
 					</label>
 					<label for="select">X-Axis</label>
-					<select id="x-axis-options-select" onchange="xAxisOptionsChanged()">
+					<select id="x-axis-options-select" onchange="axisControls.xAxisOptionsChanged()">
 						<option value="BMI">Body Mass Index</option>
 						<option value="HbA1c">HbA1c[%]</option>
 						<option value="NBZ">Blood Sugar[mg/dl]</option>
