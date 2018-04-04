@@ -7,24 +7,41 @@
  *****************************************************************************
  *****************************************************************************
  */
-var colors = {
+var CONSTANTS = {};
+
+CONSTANTS.colors = {
 	LIGHT_GREEN: "#006D2C",
 	LIGHT_PINK: "#770174",
 	BLACK: "#000000"
 };
 
-var circleRadius = {
+CONSTANTS.circleRadius = {
 	SMALL: "3px",
 	MEDIUM: "5px",
 	LARGE: "8px",
 	ZERO: "0px"
-}
+};
 
-var squareSize = {
+CONSTANTS.squareSize = {
 	SMALL: "10px",
 	LARGE: "16px",
 	ZERO: "0px"
-}
+};
+
+CONSTANTS.rangeValues = {
+	// [ lowerThreshold, upperThreshold ]
+	"HbA1c": [4.0, 6.0],
+	"NBZ": [0, 0],
+	"BMI": [17, 25],
+	"Weight": [0, 0],
+	"RR_syst": [120, 140],
+	"RR_diast": [80, 90],
+	"Size": [0, 0],
+	"Chol": [0, 0],
+	"TG": [0, 0],
+	"Crea": [0, 0]
+};
+
 
 
 /*
@@ -204,6 +221,7 @@ axisControls.yAxisOptionsChanged = function() {
 	var value = $('#y-axis-options-select').val();
 	console.log(value);
 	chartProperties.yAxisCurrentValue = value;
+	axisControls.setDefaultThresholdsForAxes();
 
 	yScale.domain(d3.extent(chartProperties.mainData, function(d) {
 		return d[chartProperties.yAxisCurrentValue];
@@ -214,11 +232,13 @@ axisControls.yAxisOptionsChanged = function() {
 	drawChart(chartProperties.data);
 }
 
+
 axisControls.xAxisOptionsChanged = function() {
 	console.log("entered xAxisOptionsChanged");
 	var value = $('#x-axis-options-select').val();
 	console.log(value);
 	chartProperties.xAxisCurrentValue = value;
+	axisControls.setDefaultThresholdsForAxes();
 
 	xScale.domain(d3.extent(chartProperties.mainData, function(d) {
 		return d[chartProperties.xAxisCurrentValue];
@@ -229,60 +249,107 @@ axisControls.xAxisOptionsChanged = function() {
 	drawChart(chartProperties.data);
 }
 
-function changeThresholdValue() {
-	// console.log("entered onblur");
-	var x = document.getElementById("input-y-axis-upper-threshold");
-	console.log(x.value);
-	// console.log(d3.select('#input-y-axis-upper-threshold')[0].value);
+
+axisControls.yAxisChangeThresholdValue = function() {
+	// console.log("entered axisControls.yAxisChangeThresholdValue");
+	var minY = $("#input-y-axis-lower-threshold").val();
+	var maxY = $("#input-y-axis-upper-threshold").val();
+	console.log(minY, maxY);
+	d3.select("#yAxisRangeBox").remove();
+	axisControls.showRangesForYaxis(minY, maxY);
 }
+
+
+axisControls.xAxisChangeThresholdValue = function() {
+	// console.log("entered axisControls.xAxisChangeThresholdValue");
+	var minX = $("#input-x-axis-lower-threshold").val();
+	var minY = $("#input-x-axis-upper-threshold").val();
+	d3.select("#xAxisRangeBox").remove();
+	console.log(minX, maxX);
+}
+
 
 axisControls.yAxisRangeChecked = function() {
 	console.log("entered yAxisRangeChecked");
 	var x = document.getElementById("y-axis-range-checkbox");
 	if (x.checked) {
 		console.log("show divs");
-		axisControls.showRangesForYaxis(0, 0);
+		axisControls.yAxisChangeThresholdValue();
 	} else {
 		console.log("hide divs");
+		d3.select("#yAxisRangeBox").remove();
 	}
 }
 
 
 axisControls.showRangesForYaxis = function(minY, maxY) {
 	console.log("entered showRangesForYaxis");
-	var yAxisRangeBox = svg.append("g")
-	yAxisRangeBox.append("rect")
+	axisControls.yAxisRangeBox = svg.append("g")
+	axisControls.yAxisRangeBox.append("rect")
+		.attr("id", "yAxisRangeBox")
+		.attr("class", "y-axis-range-box")
 		.attr("x", function() {
-			return xScale(0);
+			return xScale(xScale.domain()[0]);
 		})
 		.attr("y", function() {
 			return yScale(maxY);
 		})
-		.attr("width", xScale(100))
+		.attr("width", xScale(xScale.domain()[1]))
 		.attr("height", function() {
 			return yScale(minY) - yScale(maxY);
 		})
-		.attr("class", "y-axis-range-box")
+
 }
 
 
+axisControls.xAxisRangeChecked = function() {
+	console.log("entered xAxisRangeChecked");
+	var x = document.getElementById("x-axis-range-checkbox");
+	if (x.checked) {
+		console.log("show divs");
+		axisControls.showRangesForXaxis(4, 6);
+	} else {
+		console.log("hide divs");
+		d3.select("#xAxisRangeBox").remove();
+	}
+}
+
 axisControls.showRangesForXaxis = function(minX, maxX) {
 	console.log("entered showRangesForXaxis");
-	var xAxisRangeBox = svg.append("g")
-	xAxisRangeBox.append("rect")
+	axisControls.xAxisRangeBox = svg.append("g")
+	axisControls.xAxisRangeBox.append("rect")
+		.attr("id", "xAxisRangeBox")
 		.attr("y", function() {
-			return yScale(100);
+			return yScale(yScale.domain()[0]);
 		})
 		.attr("x", function() {
 			return xScale(minX);
 		})
-		.attr("height", yScale(0))
+		.attr("height", yScale(yScale.domain()[1]))
 		.attr("width", function() {
 			return xScale(maxX) - xScale(minX);
 		})
 		.attr("class", "x-axis-range-box")
 }
 
+axisControls.setDefaultThresholdsForAxes = function() {
+	$("#input-y-axis-upper-threshold").val(CONSTANTS.rangeValues[chartProperties.yAxisCurrentValue][1])
+		.attr("placeholder", CONSTANTS.rangeValues[chartProperties.yAxisCurrentValue][1]);
+	$("#input-y-axis-lower-threshold").val(CONSTANTS.rangeValues[chartProperties.yAxisCurrentValue][0])
+		.attr("placeholder", CONSTANTS.rangeValues[chartProperties.yAxisCurrentValue][0]);
+	$("#input-x-axis-upper-threshold").val(CONSTANTS.rangeValues[chartProperties.xAxisCurrentValue][1])
+		.attr("placeholder", CONSTANTS.rangeValues[chartProperties.xAxisCurrentValue][1]);
+	$("#input-x-axis-lower-threshold").val(CONSTANTS.rangeValues[chartProperties.xAxisCurrentValue][0])
+		.attr("placeholder", CONSTANTS.rangeValues[chartProperties.xAxisCurrentValue][0]);
+}
+
+axisControls.xAxisRiskRangesChecked = function(){
+	console.log("entered axisControls.xAxisRiskRangesChecked");
+}
+
+axisControls.yAxisRiskRangesChecked = function(){
+	console.log("entered axisControls.yAxisRiskRangesChecked");	
+}
 
 /*
  *****************************************************************************
@@ -524,6 +591,8 @@ function beforeDrawingChart(data) {
 	ygridlinesGroup.transition().call(ygridlines);
 	xgridlinesGroup.transition().call(xgridlines);
 
+	axisControls.setDefaultThresholdsForAxes();
+
 
 	chartProperties.nestedDataByDate = d3.nest()
 		.key(function(d) {
@@ -617,13 +686,13 @@ function drawChart(data) {
 			if (marksControls.shapeOption != "none") {
 				switch (marksControls.shapeOption) {
 					case "smoker":
-						if (d.smoker == "Yes") {
-							return circleRadius.ZERO;
+						if (d.Nikotin == "Yes") {
+							return CONSTANTS.circleRadius.ZERO;
 						}
 						break;
 					case "gender":
-						if (d.gender == "Male") {
-							return circleRadius.ZERO;
+						if (d.Gender == "Male") {
+							return CONSTANTS.circleRadius.ZERO;
 						}
 						break;
 				}
@@ -631,23 +700,23 @@ function drawChart(data) {
 			if (marksControls.sizeOption != "none") {
 				switch (marksControls.sizeOption) {
 					case "smoker":
-						if (d.smoker == "Yes") {
-							size = circleRadius.LARGE;
+						if (d.Nikotin == "Yes") {
+							size = CONSTANTS.circleRadius.LARGE;
 						} else {
-							size = circleRadius.SMALL;
+							size = CONSTANTS.circleRadius.SMALL;
 						}
 						break;
 					case "gender":
-						if (d.gender == "Male") {
-							size = circleRadius.SMALL;
+						if (d.Gender == "Male") {
+							size = CONSTANTS.circleRadius.SMALL;
 						} else {
-							size = circleRadius.LARGE;
+							size = CONSTANTS.circleRadius.LARGE;
 						}
 						break;
 				}
 				return size;
 			} else {
-				return circleRadius.MEDIUM;
+				return CONSTANTS.circleRadius.MEDIUM;
 			}
 		})
 		.attr("fill", function(d) {
@@ -665,8 +734,8 @@ function drawChart(data) {
 
 	squares.enter()
 		.append("rect")
-		.attr("height", squareSize.ZERO)
-		.attr("width", squareSize.ZERO);
+		.attr("height", CONSTANTS.squareSize.ZERO)
+		.attr("width", CONSTANTS.squareSize.ZERO);
 
 	squares.attr("class", "dot")
 		.attr("x", function(d) {
@@ -695,6 +764,15 @@ function drawChart(data) {
 
 }
 
+/**
+ **************************************************************************************
+ **************************************************************************************
+ *
+ *  Marks Controls
+ *
+ **************************************************************************************
+ **************************************************************************************
+ */
 var marksFunctions = {};
 
 marksFunctions.fillOptions = function(d) {
@@ -702,53 +780,53 @@ marksFunctions.fillOptions = function(d) {
 	if (marksControls.colorOption != "none") {
 		switch (marksControls.colorOption) {
 			case "smoker":
-				if (d.smoker == "Yes") {
-					color = colors.LIGHT_PINK
+				if (d.Nikotin == "Yes") {
+					color = CONSTANTS.colors.LIGHT_PINK
 				} else {
-					color = colors.LIGHT_GREEN
+					color = CONSTANTS.colors.LIGHT_GREEN
 				}
 				break;
 			case "gender":
-				if (d.gender == "Male") {
-					color = colors.LIGHT_PINK
+				if (d.Gender == "Male") {
+					color = CONSTANTS.colors.LIGHT_PINK
 				} else {
-					color = colors.LIGHT_GREEN
+					color = CONSTANTS.colors.LIGHT_GREEN
 				}
 				break;
 		}
 		return color;
 	} else {
-		return colors.BLACK;
+		return CONSTANTS.colors.BLACK;
 	}
 }
 
 marksFunctions.sizeOptions = function(d) {
-	var size = squareSize.ZERO;
+	var size = CONSTANTS.squareSize.ZERO;
 	if (marksControls.shapeOption != "none") {
 		switch (marksControls.shapeOption) {
 			case "smoker":
-				if (d.smoker == "Yes") {
-					size = squareSize.SMALL;
+				if (d.Nikotin == "Yes") {
+					size = CONSTANTS.squareSize.SMALL;
 				}
 				break;
 			case "gender":
-				if (d.gender == "Female") {
-					size = squareSize.SMALL;
+				if (d.Gender == "Female") {
+					size = CONSTANTS.squareSize.SMALL;
 				}
 				break;
 		}
 	}
 
-	if (size == squareSize.SMALL && marksControls.sizeOption != "none") {
+	if (size == CONSTANTS.squareSize.SMALL && marksControls.sizeOption != "none") {
 		switch (marksControls.shapeOption) {
 			case "smoker":
-				if (d.smoker == "Yes") {
-					size = squareSize.LARGE;
+				if (d.Nikotin == "Yes") {
+					size = CONSTANTS.squareSize.LARGE;
 				}
 				break;
 			case "gender":
-				if (d.gender == "Female") {
-					size = squareSize.LARGE;
+				if (d.Gender == "Female") {
+					size = CONSTANTS.squareSize.LARGE;
 				}
 				break;
 		}
@@ -756,3 +834,14 @@ marksFunctions.sizeOptions = function(d) {
 
 	return size;
 }
+
+
+/**
+ **************************************************************************************
+ **************************************************************************************
+ *
+ *  Filter Options
+ *
+ **************************************************************************************
+ **************************************************************************************
+ */

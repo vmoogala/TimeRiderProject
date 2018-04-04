@@ -29,7 +29,7 @@
 				<div class="col-md-2 left-pane">
 					<div id="y-axis-options">
 						
-						<label for="select">Y-Axis</label>
+						<label for="select"> <b>Y-Axis</b></label>
 						<select id="y-axis-options-select" onchange="axisControls.yAxisOptionsChanged()">
 							<option value="HbA1c">HbA1c[%]</option>
 							<option value="NBZ">Blood Sugar[mg/dl]</option>
@@ -52,13 +52,13 @@
 						
 						
 						<label for="input">upper threshold</label>
-						<input type="text" id="input-y-axis-upper-threshold" onblur="changeThresholdValue()" placeholder="6.0">
+						<input type="text" id="input-y-axis-upper-threshold" class="axis-threshold-boxes" onblur="axisControls.yAxisChangeThresholdValue()" placeholder="6.0">
 						
 						
 						<label for="input">lower threshold</label>
-						<input type="text" id="input-y-axis-lower-threshold" placeholder="4.0">
+						<input type="text" id="input-y-axis-lower-threshold" class="axis-threshold-boxes" onblur="axisControls.yAxisChangeThresholdValue()" placeholder="4.0">
 						<label>
-							<input type="checkbox" value="">
+							<input type="checkbox" id="input-y-axis-show-risk-ranges" value="" onclick="axisControls.yAxisRiskRangesChecked()">
 							color risk ranges
 						</label>
 					</div>
@@ -135,20 +135,22 @@
 					</label>
 				</div>
 				<div class="col-md-4" >
-					<label>
-						Zoom options
-					</label>
-					<img class="zoom-in-out-images" src="images/increase-zoom-button.svg"
-					id="zoom-in-image" onclick="zoomControls.zoomClicked(this)"></img>
-					<img class="zoom-in-out-images" src="images/decrease-zoom.svg"
-					id="zoom-out-image" onclick="zoomControls.zoomClicked(this)"></img>
+					<div>
+						<label>
+							Zoom options
+						</label>
+						<img class="zoom-in-out-images" src="images/increase-zoom-button.svg"
+						id="zoom-in-image" onclick="zoomControls.zoomClicked(this)"></img>
+						<img class="zoom-in-out-images" src="images/decrease-zoom.svg"
+						id="zoom-out-image" onclick="zoomControls.zoomClicked(this)"></img>
+					</div>
 				</div>
-				<div class="col-md-3" >
+				<div class="col-md-5" >
 					<label>
-						<input type="checkbox" value="">
+						<input type="checkbox" value="" id="x-axis-range-checkbox" onclick="axisControls.xAxisRangeChecked()">
 						Ranges
 					</label>
-					<label for="select">X-Axis</label>
+					<label for="select"><b>X-Axis</b></label>
 					<select id="x-axis-options-select" onchange="axisControls.xAxisOptionsChanged()">
 						<option value="BMI">Body Mass Index</option>
 						<option value="HbA1c">HbA1c[%]</option>
@@ -161,6 +163,17 @@
 						<option value="TG">Triglyceride [mg/dl]</option>
 						<option value="Crea">Creatinine [mg/dl]</option>
 					</select>
+					<div class="rangeOptions">
+						<label>
+							<input type="checkbox" id="input-x-axis-show-risk-ranges" value="" onclick="axisControls.xAxisRiskRangesChecked()">
+							color risk ranges
+						</label>
+						<label for="input">upper threshold</label>
+						<input type="text" id="input-x-axis-upper-threshold" class="axis-threshold-boxes" onblur="axisControls.xAxisChangeThresholdValue()">
+						
+						<label for="input">lower threshold</label>
+						<input type="text" id="input-x-axis-lower-threshold" class="axis-threshold-boxes" onblur="axisControls.xAxisChangeThresholdValue()">
+					</div>
 				</div>
 				<div class="col-md-2" >
 				</div>
@@ -218,10 +231,18 @@
 								id = "mediaFastForward" onclick="mediaControls.mediaClicked(this)"></img>
 							</div>
 						</div>
-						<div class="col-md-4"></div>
+						<div class="col-md-4">
+						</div>
 					</div>
 				</div>
 				<div class="col-md-2 bottom-right-pane">
+					<div style="padding-top: 5px;">
+					<b> Research Paper: </b><br>
+					<ul style="margin-left: -10px;">
+						<li><a href="http://ieg.ifs.tuwien.ac.at/research/timerider/" target="blank"> Visually Exploring Multivariate Trends in Patient Cohorts using Animated Scatter Plots</a></li>
+						<li><a href="https://dl.acm.org/citation.cfm?id=2021761">ACM link</a></li>
+					</ul>					
+					</div>
 				</div>
 			</div>
 		</div>

@@ -47,7 +47,7 @@ svg {
 }
 
 .bottom-row {
-	height: 50px;
+	height: 80px;
 	border: 1px solid gray;
 	border-radius: 5px;
 }
@@ -123,6 +123,10 @@ svg {
 	border: 1px solid gray;
 	border-radius: 5px;
 	height: 200px;
+}
+
+.axis-threshold-boxes {
+	width: 50px;
 }
 
 /**
@@ -273,9 +277,9 @@ svg {
 	height: 25px;
 }
 
-.media-button-images{
+.media-button-images {
 	width: 25px;
-	height: 25px;	
+	height: 25px;
 }
 
 .media-buttons {
@@ -292,6 +296,10 @@ svg {
 .y-axis-range-box {
 	opacity: 0.1;
 	fill: blue;
+}
+
+.rangeOptions{
+	/*display: none;*/
 }
 
 /*div.row div.col-md-3 .div div.slidercontainer{
