@@ -1,0 +1,4 @@
+NaN issue for scatterplot
+0 in plots
+
+multiple show in plots, hover effect

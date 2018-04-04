@@ -307,7 +307,7 @@ axisControls.xAxisRangeChecked = function() {
 	var x = document.getElementById("x-axis-range-checkbox");
 	if (x.checked) {
 		console.log("show divs");
-		axisControls.showRangesForXaxis(4, 6);
+		axisControls.yAxisChangeThresholdValue();
 	} else {
 		console.log("hide divs");
 		d3.select("#xAxisRangeBox").remove();
@@ -343,12 +343,12 @@ axisControls.setDefaultThresholdsForAxes = function() {
 		.attr("placeholder", CONSTANTS.rangeValues[chartProperties.xAxisCurrentValue][0]);
 }
 
-axisControls.xAxisRiskRangesChecked = function(){
+axisControls.xAxisRiskRangesChecked = function() {
 	console.log("entered axisControls.xAxisRiskRangesChecked");
 }
 
-axisControls.yAxisRiskRangesChecked = function(){
-	console.log("entered axisControls.yAxisRiskRangesChecked");	
+axisControls.yAxisRiskRangesChecked = function() {
+	console.log("entered axisControls.yAxisRiskRangesChecked");
 }
 
 /*
@@ -373,7 +373,7 @@ tooltipFunctions.onMouseOver = function(d) {
 		.transition()
 		.duration(200) // in ms
 		.style("opacity", .9);
-	// tooltipFunctions.appendLineChart(d);
+	tooltipFunctions.appendLineChart(d);
 }
 
 
@@ -384,6 +384,8 @@ tooltipFunctions.onMouseOut = function() {
 		.transition()
 		.duration(200) // ms
 		.style("opacity", 0);
+
+	// d3.select("#lineChartGroup").remove();
 }
 
 //Forming a html string to show the popup
@@ -431,9 +433,18 @@ tooltipFunctions.getHtmlStringForToolTip = function(d_in) {
 }
 
 tooltipFunctions.appendLineChart = function(d) {
-	var lineChartGroup = svg.append("g");
+	chartProperties.lineChartGroup = svg.append("g").attr("id", "lineChartGroup");
 	console.log("current data -->", d);
 	var currentPatientId = d.ID;
+
+	var thisPatientData = [];
+
+	chartProperties.mainData.forEach(function(x) {
+		if ((x.ID == d.ID) && (x[chartProperties.xAxisCurrentValue] != 0) && (x[chartProperties.yAxisCurrentValue] != 0)) {
+			thisPatientData.push(x);
+		}
+	});
+	console.log(thisPatientData);
 
 	var line = d3.line()
 		.x(function(d) {
@@ -443,17 +454,46 @@ tooltipFunctions.appendLineChart = function(d) {
 			return yScale(d[chartProperties.yAxisCurrentValue]);
 		});
 
-	lineChartGroup.append("path")
-		.datum(chartProperties.mainData)
-		.filter(function(d) {
-			return d.ID = currentPatientId;
-		})
+	chartProperties.lineChartGroup.append("path")
+		.datum(thisPatientData)
 		.attr("fill", "none")
 		.attr("stroke", "steelblue")
 		.attr("stroke-linejoin", "round")
 		.attr("stroke-linecap", "round")
 		.attr("stroke-width", 1.5)
 		.attr("d", line);
+
+	// var dataForScatterPlot = [];
+	// thisPatientData.forEach(function(x) {
+	// 	if(x !== d){
+	// 		dataForScatterPlot.push(x);
+	// 	}
+	// });
+	chartProperties.lineChartGroup.selectAll("dot")
+		.data(thisPatientData)
+		.enter().append("circle")
+		.style("fill", "red")
+		.attr("r", CONSTANTS.circleRadius.MEDIUM)
+		.attr("cx", function(d) {
+			return xScale(d[chartProperties.xAxisCurrentValue]);
+		})
+		.attr("cy", function(d) {
+			return yScale(d[chartProperties.yAxisCurrentValue]);
+		})
+		.on("mouseover", function(d) {
+			tooltipFunctions.lineChartMouseOver(d)
+		})
+		.on("mouseout", tooltipFunctions.onMouseOut);;
+}
+
+tooltipFunctions.lineChartMouseOver = function(d) {
+	tooltip.html(tooltipFunctions.getHtmlStringForToolTip(d))
+		.style("left", (d3.event.pageX + 3) + "px")
+		.style("top", (d3.event.pageY + 3) + "px")
+		// .style("display", "inline")
+		.transition()
+		.duration(200) // in ms
+		.style("opacity", .9);
 }
 
 /**
@@ -667,10 +707,13 @@ function drawChart(data) {
 
 	var circles = svg.selectAll("circle")
 		.data(chartProperties.data);
+	// .filter(function(d){
+	// 	return d[chartProperties.xAxisCurrentValue]!=0 && d[chartProperties.yAxisCurrentValue]!=0;
+	// });
 
 	circles.enter()
-		.append("circle")
-		.attr("r", 5);
+		.append("circle");
+	// .attr("r", 5); // removed for filtering values with 0's
 
 	circles.attr("class", "dot")
 		.attr("cx", function(d) {
@@ -682,6 +725,9 @@ function drawChart(data) {
 			return yScale(+d[chartProperties.yAxisCurrentValue]);
 		})
 		.attr("r", function(d) {
+			if (d[chartProperties.xAxisCurrentValue] == 0 || d[chartProperties.yAxisCurrentValue] == 0) {
+				return 0;
+			}
 			var size;
 			if (marksControls.shapeOption != "none") {
 				switch (marksControls.shapeOption) {
@@ -718,6 +764,7 @@ function drawChart(data) {
 			} else {
 				return CONSTANTS.circleRadius.MEDIUM;
 			}
+
 		})
 		.attr("fill", function(d) {
 			return marksFunctions.fillOptions(d);
