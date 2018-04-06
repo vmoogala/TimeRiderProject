@@ -43,24 +43,18 @@ console.log(minDate, maxDate);
 function getNextAvailableDateDataAndIndex(inputDate){
 	for(var i=0; i<currentPatientDateArray.length; i++){
 		if(inputDate < currentPatientDateArray[i]){
-			// console.log("before break");
-			// return currentPatientDateArray[i];
-			return [currentPatientDateArray[i], currentPatient[i], dateArray.indexOf(currentPatientDateArray[i])];
-			// break;
+			return [currentPatientDateArray[i], currentPatient[i], dateArray.indexOf(currentPatientDateArray[i]), currentPatient[i-1]];
 		}
 		
 	}
 }
 
 
-for(var i=minIndex; i<= minIndex+10; i++){
+for(var i=minIndex; i<= minIndex+230; i++){
     var isDataAvailable = false;
     var availableDataIndex;
-    
-    var nextAvailableDataIndex;
 
     currentPatient.forEach(function(d){
-        // console.log(singleVisitData);
         if(d.Date == dateArray[i]){
             isDataAvailable = true;
             availableDataIndex = currentPatient.indexOf(d);
@@ -70,31 +64,55 @@ for(var i=minIndex; i<= minIndex+10; i++){
     if(isDataAvailable){
         currentPatientModified.push(currentPatient[availableDataIndex]);
     }else{
-        var temp1 = {};
-        var nextAvailableData = null;
-        nextAvailableData = getNextAvailableDateDataAndIndex(dateArray[i]);
-        temp1 = nextAvailableData[1];
-        // console.log("temp before-->" + JSON.stringify(temp));
-        temp1.Date = dateArray[i];
-                // console.log("temp after-->" +JSON.stringify(temp));
+        var temp = {};
+        var nextAvailableData = [];
+        var nextAvailableDistance;
+        var returnedValue = getNextAvailableDateDataAndIndex(dateArray[i]);
+        nextAvailableData = returnedValue[1];
+        nextAvailableDistance = returnedValue[2] - i;
+        previousAvailableData = returnedValue[3];
+
+        temp = nextAvailableData;
+        temp.Date = dateArray[i];
+
+        HbA1c_diff = Math.abs(nextAvailableData.HbA1c - previousAvailableData.HbA1c)/nextAvailableDistance;
+        if(nextAvailableData.HbA1c > previousAvailableData.HbA1c){
+			temp.HbA1c = previousAvailableData.HbA1c + HbA1c_diff;
+        }else{
+        	temp.HbA1c = previousAvailableData.HbA1c - HbA1c_diff;
+        }
+
+        RR_syst_diff = Math.abs(nextAvailableData.RR_syst - previousAvailableData.RR_syst)/nextAvailableDistance;
+        if(nextAvailableData.RR_syst > previousAvailableData.RR_syst){
+			temp.RR_syst = previousAvailableData.RR_syst + RR_syst_diff;
+        }else{
+        	temp.RR_syst = previousAvailableData.RR_syst - RR_syst_diff;
+        }
+
+        RR_diast_diff = Math.abs(nextAvailableData.RR_diast - previousAvailableData.RR_diast)/nextAvailableDistance;
+
+        if(nextAvailableData.RR_diast > previousAvailableData.RR_diast){
+			temp.RR_diast = previousAvailableData.RR_diast + RR_diast_diff;
+        }else{
+        	temp.RR_diast = previousAvailableData.RR_diast - RR_diast_diff;
+        }
+
+        // temp.HbA1c = Math.abs(nextAvailableData.HbA1c - previousAvailableData.HbA1c)/nextAvailableDistance;
+        // temp.RR_syst = Math.abs(nextAvailableData.RR_syst - previousAvailableData.RR_syst)/nextAvailableDistance;
+		// temp.RR_diast = Math.abs(nextAvailableData.RR_diast - previousAvailableData.RR_diast)/nextAvailableDistance;
+// emNBZ
+// BMI
+// Weight
+
+// Size
+// Chol
+// TG
+// Crea
         // temp.opacity = 0.5;
-        addToMyData(temp1);
-        // currentPatientModified[i].Date = dateArray[i];
-        // console.log("after pushing"+ JSON.stringify(currentPatientModified));
+        addToMyData(temp);
     }
 }
 
-for(var p=0; p < currentPatientModified.length; p++){
-	var item = currentPatientModified[p];
-	if(item.ID == null){
-		var z = item.Date;
-		var nextAvailableData = null;
-		nextAvailableData = getNextAvailableDateDataAndIndex(z);
-		item = nextAvailableData[1];
- 		item.Date = z;
- 		currentPatientModified[p] = item;
-	}
-}
 
 console.log(currentPatientModified);
 
