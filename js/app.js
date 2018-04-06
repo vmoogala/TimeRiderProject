@@ -1,3 +1,4 @@
+//619,644,664,671,704-5-6-8
 /*
  *****************************************************************************
  *****************************************************************************
@@ -41,8 +42,6 @@ CONSTANTS.rangeValues = {
 	"TG": [0, 0],
 	"Crea": [0, 0]
 };
-
-
 
 /*
  *****************************************************************************
@@ -483,7 +482,7 @@ tooltipFunctions.appendLineChart = function(d) {
 		.on("mouseover", function(d) {
 			tooltipFunctions.lineChartMouseOver(d)
 		})
-		.on("mouseout", tooltipFunctions.onMouseOut);;
+		.on("mouseleave", tooltipFunctions.onLineChartMouseOut);;
 }
 
 tooltipFunctions.lineChartMouseOver = function(d) {
@@ -496,6 +495,16 @@ tooltipFunctions.lineChartMouseOver = function(d) {
 		.style("opacity", .9);
 }
 
+tooltipFunctions.onLineChartMouseOut = function(){
+	console.log("mouseout");
+	// tooltip.style("display", "none")
+	tooltip
+		.transition()
+		.duration(200) // ms
+		.style("opacity", 0);
+
+	d3.select("#lineChartGroup").remove();	
+}
 /**
  **************************************************************************************
  **************************************************************************************
@@ -593,9 +602,12 @@ var tooltip = d3.select("body").append("div")
 // .style("display", "none");
 
 
-d3.csv("/data/TimeRiderDataFinal.csv", type, function(data) {
+// d3.csv("/data/TimeRiderDataFinal.csv", type, function(data) {
+d3.csv("/data/ModifiedDataWorked.csv", type, function(data) {
 	// drawChart(data);
+	// console.log(JSON.stringify(data));
 	chartProperties.mainData = data;
+	// console.log(chartProperties.mainData)
 	beforeDrawingChart(data);
 });
 
@@ -615,7 +627,7 @@ function type(d) {
 
 
 function beforeDrawingChart(data) {
-	console.log("beforeDrawingChart");
+	// console.log("beforeDrawingChart");
 
 	xScale.domain(d3.extent(chartProperties.mainData, function(d) {
 		return d[chartProperties.xAxisCurrentValue];
@@ -640,7 +652,7 @@ function beforeDrawingChart(data) {
 		})
 		.entries(data);
 
-	console.log(chartProperties.nestedDataByDate);
+	// console.log(chartProperties.nestedDataByDate);
 	chartProperties.dateArray = [];
 	for (i = 0; i < chartProperties.nestedDataByDate.length; i++) {
 		chartProperties.dateArray.push(chartProperties.nestedDataByDate[i].key);
@@ -649,7 +661,7 @@ function beforeDrawingChart(data) {
 	chartProperties.dateArray = chartProperties.dateArray.sort();
 	// console.log(chartProperties.dateArray);
 
-	setDateOptionsForSlider(chartProperties.dateArray[0], chartProperties.dateArray[chartProperties.dateArray.length - 1]);
+	setDateOptionsForSlider(chartProperties.dateArray[0], chartProperties.dateArray[chartProperties.dateArray.length - 2]);
 
 	// console.log(chartProperties.nestedDataByDate[0].values);
 	chartProperties.data = chartProperties.nestedDataByDate[0].values;
@@ -660,10 +672,14 @@ function beforeDrawingChart(data) {
 };
 
 function setDateOptionsForSlider(min_date, max_date) {
-	console.log(min_date, max_date);
+	// console.log(min_date, max_date);
 	chartProperties.days = d3.timeDay.range(new Date(min_date), new Date(max_date));
 	total_days = chartProperties.days.length;
-	// console.log(chartProperties.days);
+	temp = []
+	chartProperties.days.forEach(function(d){
+		temp.push(d.toISOString().substring(0,10));
+	})
+	// console.log(JSON.stringify(temp));
 	// console.log(total_days);
 	$("#sliderDateIndicatorText").text("Currently Visible Time:" + new Date(min_date).toISOString().substring(0, 10));
 
@@ -696,11 +712,11 @@ function timeSliderOptionChanged(x) {
 
 // Scatter points
 function drawChart(data) {
-	console.log("entered drawChart");
-	console.log(chartProperties.xAxisCurrentValue);
-	console.log(chartProperties.yAxisCurrentValue);
+	// console.log("entered drawChart");
+	// console.log(chartProperties.xAxisCurrentValue);
+	// console.log(chartProperties.yAxisCurrentValue);
 	chartProperties.data = data;
-	console.log(chartProperties.data);
+	// console.log(chartProperties.data);
 
 	ygridlinesGroup.transition().call(ygridlines);
 	xgridlinesGroup.transition().call(xgridlines);

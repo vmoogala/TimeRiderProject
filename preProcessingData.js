@@ -50,11 +50,14 @@ function getNextAvailableDateDataAndIndex(inputDate){
 }
 
 
-for(var i=minIndex; i<= minIndex+230; i++){
+for(var i=minIndex; i<= maxIndex-1; i++){
     var isDataAvailable = false;
     var availableDataIndex;
 
     currentPatient.forEach(function(d){
+        if(dateArray[i]== "2006-04-12"){
+
+        }
         if(d.Date == dateArray[i]){
             isDataAvailable = true;
             availableDataIndex = currentPatient.indexOf(d);
@@ -62,44 +65,41 @@ for(var i=minIndex; i<= minIndex+230; i++){
     });
 
     if(isDataAvailable){
-        currentPatientModified.push(currentPatient[availableDataIndex]);
+        addToMyData(currentPatient[availableDataIndex]);
     }else{
         var temp = {};
         var nextAvailableData = [];
         var nextAvailableDistance;
+        // var previousAvailableData = {};
         var returnedValue = getNextAvailableDateDataAndIndex(dateArray[i]);
         nextAvailableData = returnedValue[1];
         nextAvailableDistance = returnedValue[2] - i;
-        previousAvailableData = returnedValue[3];
+        // previousAvailableData = returnedValue[3];
 
         temp = nextAvailableData;
         temp.Date = dateArray[i];
 
-        HbA1c_diff = Math.abs(nextAvailableData.HbA1c - previousAvailableData.HbA1c)/nextAvailableDistance;
-        if(nextAvailableData.HbA1c > previousAvailableData.HbA1c){
-			temp.HbA1c = previousAvailableData.HbA1c + HbA1c_diff;
-        }else{
-        	temp.HbA1c = previousAvailableData.HbA1c - HbA1c_diff;
-        }
+        // var HbA1c_diff = Math.abs(parseInt(nextAvailableData.HbA1c) - parseInt(previousAvailableData.HbA1c))/parseInt(nextAvailableDistance);
+        // if(nextAvailableData.HbA1c > previousAvailableData.HbA1c){
+		// 	temp.HbA1c = parseInt(previousAvailableData.HbA1c) + HbA1c_diff;
+        // }else{
+        // 	temp.HbA1c = parseInt(previousAvailableData.HbA1c) - HbA1c_diff;
+        // }
 
-        RR_syst_diff = Math.abs(nextAvailableData.RR_syst - previousAvailableData.RR_syst)/nextAvailableDistance;
-        if(nextAvailableData.RR_syst > previousAvailableData.RR_syst){
-			temp.RR_syst = previousAvailableData.RR_syst + RR_syst_diff;
-        }else{
-        	temp.RR_syst = previousAvailableData.RR_syst - RR_syst_diff;
-        }
+        // RR_syst_diff = Math.abs(nextAvailableData.RR_syst - previousAvailableData.RR_syst)/nextAvailableDistance;
+        // if(nextAvailableData.RR_syst > previousAvailableData.RR_syst){
+		// 	temp.RR_syst = previousAvailableData.RR_syst + RR_syst_diff;
+        // }else{
+        // 	temp.RR_syst = previousAvailableData.RR_syst - RR_syst_diff;
+        // }
 
-        RR_diast_diff = Math.abs(nextAvailableData.RR_diast - previousAvailableData.RR_diast)/nextAvailableDistance;
+        // RR_diast_diff = Math.abs(nextAvailableData.RR_diast - previousAvailableData.RR_diast)/nextAvailableDistance;
 
-        if(nextAvailableData.RR_diast > previousAvailableData.RR_diast){
-			temp.RR_diast = previousAvailableData.RR_diast + RR_diast_diff;
-        }else{
-        	temp.RR_diast = previousAvailableData.RR_diast - RR_diast_diff;
-        }
-
-        // temp.HbA1c = Math.abs(nextAvailableData.HbA1c - previousAvailableData.HbA1c)/nextAvailableDistance;
-        // temp.RR_syst = Math.abs(nextAvailableData.RR_syst - previousAvailableData.RR_syst)/nextAvailableDistance;
-		// temp.RR_diast = Math.abs(nextAvailableData.RR_diast - previousAvailableData.RR_diast)/nextAvailableDistance;
+        // if(nextAvailableData.RR_diast > previousAvailableData.RR_diast){
+		// 	temp.RR_diast = previousAvailableData.RR_diast + RR_diast_diff;
+        // }else{
+        // 	temp.RR_diast = previousAvailableData.RR_diast - RR_diast_diff;
+        // }
 // emNBZ
 // BMI
 // Weight
@@ -120,6 +120,3 @@ function addToMyData(x){
     var y = JSON.parse(JSON.stringify(x));
     currentPatientModified.push(y);
 }
-
-
- 
