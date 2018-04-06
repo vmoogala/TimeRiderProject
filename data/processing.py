@@ -74,7 +74,7 @@ print(minDate, maxDate)
 def getNextPreviousDataAndDistance(inputDate):
 	for index, item in enumerate(currentPatientDateArray):
 		if inputDate < currentPatientDateArray[index]:
-			return currentPatient[index], currentPatient[index-1], (dateArray.index(currentPatientDateArray[index]) - dateArray.index(inputDate))
+			return currentPatient[index], currentPatient[index-1], (dateArray.index(currentPatientDateArray[index]) - dateArray.index(currentPatientDateArray[index-1])), (dateArray.index(currentPatientDateArray[index]) - dateArray.index(inputDate))
 
 print(getNextPreviousDataAndDistance("2005-01-06"))
 
@@ -95,20 +95,23 @@ for i in range(minIndex, maxIndex):
 		temp = {}
 		nextAvailableData = {}
 		previousAvailableData = {}
-		distance = None
+		distance_total = None
+		distance_to_next = None
 
-		nextAvailableData, previousAvailableData, distance = getNextPreviousDataAndDistance(dateArray[i])
+		nextAvailableData, previousAvailableData, distance_total, distance_to_next = getNextPreviousDataAndDistance(dateArray[i])
 
 		temp = copy.deepcopy(nextAvailableData)
 		temp["Date"] = dateArray[i]
+		
 		try:
-			HbA1c_diff = (abs(float(nextAvailableData["HbA1c"]) - float(previousAvailableData["HbA1c"])) / int(distance))
+			HbA1c_diff = ((abs(float(previousAvailableData["HbA1c"]) - float(nextAvailableData["HbA1c"])) / int(distance_total)))
 			if (float(nextAvailableData["HbA1c"]) > float(previousAvailableData["HbA1c"])):
-				temp["HbA1c"] = float(previousAvailableData["HbA1c"]) + HbA1c_diff
+				temp["HbA1c"] = float(previousAvailableData["HbA1c"]) + (HbA1c_diff * (distance_total - distance_to_next))
 			else:
-				temp["HbA1c"] = float(previousAvailableData["HbA1c"]) - HbA1c_diff
+				temp["HbA1c"] = float(previousAvailableData["HbA1c"]) - (HbA1c_diff * (distance_total - distance_to_next))
 		except ValueError:
 			temp["HbA1c"] = 0
+		
 		currentPatientModified.append(temp)
 
 
