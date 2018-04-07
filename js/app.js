@@ -439,7 +439,7 @@ tooltipFunctions.appendLineChart = function(d) {
 	var thisPatientData = [];
 
 	chartProperties.mainData.forEach(function(x) {
-		if ((x.ID == d.ID) && (x[chartProperties.xAxisCurrentValue] != 0) && (x[chartProperties.yAxisCurrentValue] != 0)) {
+		if ((x.ID == d.ID) && (x.opacity == 1) && (x[chartProperties.xAxisCurrentValue] != 0) && (x[chartProperties.yAxisCurrentValue] != 0)) {
 			thisPatientData.push(x);
 		}
 	});
@@ -459,7 +459,7 @@ tooltipFunctions.appendLineChart = function(d) {
 		.attr("stroke", "steelblue")
 		.attr("stroke-linejoin", "round")
 		.attr("stroke-linecap", "round")
-		.attr("stroke-width", 1.5)
+		.attr("stroke-width", 3)
 		.attr("d", line);
 
 	// var dataForScatterPlot = [];
@@ -781,6 +781,9 @@ function drawChart(data) {
 				return CONSTANTS.circleRadius.MEDIUM;
 			}
 
+		})
+		.attr("opacity", function(d){
+			return d.opacity;
 		})
 		.attr("fill", function(d) {
 			return marksFunctions.fillOptions(d);
