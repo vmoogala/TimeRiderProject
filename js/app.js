@@ -93,16 +93,26 @@ function takeScreenShot() {
  *****************************************************************************
  */
 var mediaControls = {
-	mediaIsPlaying: false
+	mediaIsPlaying: false,
+	tempoValue: 50,
+	currentSliderValue: 0
 };
+
+
 
 mediaControls.mediaClicked = function(mediaImg) {
 	console.log("mediaClicked with id ->" + mediaImg.id);
 	switch (mediaImg.id) {
 		case "mediaFastRewind":
+			mediaControls.currentSliderValue = mediaControls.currentSliderValue - 10;
+			$('#timeLineSlider').val(mediaControls.currentSliderValue);
+			timeSliderOptionChanged(mediaControls.currentSliderValue);
 			console.log("mediaFastRewind");
 			break;
 		case "mediaRewind":
+			mediaControls.currentSliderValue = mediaControls.currentSliderValue - 1;
+			$('#timeLineSlider').val(mediaControls.currentSliderValue);
+			timeSliderOptionChanged(mediaControls.currentSliderValue);
 			console.log("mediaRewind");
 			break;
 		case "mediaPlayPause":
@@ -113,13 +123,20 @@ mediaControls.mediaClicked = function(mediaImg) {
 				mediaControls.mediaIsPlaying = false;
 			} else {
 				$("#mediaPlayPause").attr("src", "images/ic_play_arrow_black_24dp_2x.png");
+				clearInterval(mediaControls.setIntervalId);
 				mediaControls.mediaIsPlaying = true;
 			}
 			break;
 		case "mediaForward":
+			mediaControls.currentSliderValue = mediaControls.currentSliderValue + 1;
+			$('#timeLineSlider').val(mediaControls.currentSliderValue);
+			timeSliderOptionChanged(mediaControls.currentSliderValue);
 			console.log("mediaForward");
 			break;
 		case "mediaFastForward":
+			mediaControls.currentSliderValue = mediaControls.currentSliderValue + 10;
+			$('#timeLineSlider').val(mediaControls.currentSliderValue);
+			timeSliderOptionChanged(mediaControls.currentSliderValue);
 			console.log("mediaFastForward");
 			break;
 	}
@@ -127,17 +144,18 @@ mediaControls.mediaClicked = function(mediaImg) {
 
 
 mediaControls.playAutomatically = function() {
-	temp = 0;
+	temp = mediaControls.currentSliderValue;
 	temp_max = chartProperties.days.length - 1;
-	var x = window.setInterval(function() {
+	mediaControls.setIntervalId = window.setInterval(function() {
 		if (temp < temp_max) {
 			$('#timeLineSlider').val(temp);
 			timeSliderOptionChanged(temp);
+			mediaControls.currentSliderValue = temp;
 			temp = temp + 1;
 		} else {
-			clearInterval(x)
+			clearInterval(mediaControls.setIntervalId)
 		}
-	}, 50);
+	}, mediaControls.tempoValue);
 
 }
 
