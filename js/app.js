@@ -58,6 +58,7 @@ var tempoSlider = document.getElementById("tempoSlider");
 
 // Update the current slider value (each time you drag the slider handle)
 tempoSlider.oninput = function() {
+	mediaControls.tempoValue = tempoSlider.value;
 	console.log(tempoSlider.value);
 }
 
@@ -118,12 +119,13 @@ mediaControls.mediaClicked = function(mediaImg) {
 		case "mediaPlayPause":
 			console.log("mediaPlayPause");
 			if (mediaControls.mediaIsPlaying) {
-				$("#mediaPlayPause").attr("src", "images/ic_pause_black_24dp_2x.png");
-				mediaControls.playAutomatically();
-				mediaControls.mediaIsPlaying = false;
-			} else {
 				$("#mediaPlayPause").attr("src", "images/ic_play_arrow_black_24dp_2x.png");
 				clearInterval(mediaControls.setIntervalId);
+				mediaControls.mediaIsPlaying = false;
+			} else {
+				
+				$("#mediaPlayPause").attr("src", "images/ic_pause_black_24dp_2x.png");
+				mediaControls.playAutomatically();
 				mediaControls.mediaIsPlaying = true;
 			}
 			break;
@@ -521,7 +523,7 @@ tooltipFunctions.onLineChartMouseOut = function(){
 		.duration(200) // ms
 		.style("opacity", 0);
 
-	d3.select("#lineChartGroup").remove();	
+	// d3.select("#lineChartGroup").remove();	
 }
 /**
  **************************************************************************************
@@ -679,7 +681,7 @@ function beforeDrawingChart(data) {
 	chartProperties.dateArray = chartProperties.dateArray.sort();
 	// console.log(chartProperties.dateArray);
 
-	setDateOptionsForSlider(chartProperties.dateArray[0], chartProperties.dateArray[chartProperties.dateArray.length - 2]);
+	setDateOptionsForSlider(chartProperties.dateArray[0], chartProperties.dateArray[chartProperties.dateArray.length - 1]);
 
 	// console.log(chartProperties.nestedDataByDate[0].values);
 	chartProperties.data = chartProperties.nestedDataByDate[0].values;
@@ -713,9 +715,11 @@ function setDateOptionsForSlider(min_date, max_date) {
 
 
 function timeSliderOptionChanged(x) {
+	d3.select("#lineChartGroup").remove();
 	// console.log(d3.event.target.value); // Display the default slider value
 	var d = chartProperties.days[x];
 	// console.log(d.toISOString().substring(0, 10));
+	mediaControls.currentSliderValue = chartProperties.days.indexOf(d);
 	$("#sliderDateIndicatorText").text("Currently Visible Time:" + d.toISOString().substring(0, 10));
 	for (i = 0; i < chartProperties.nestedDataByDate.length; i++) {
 		if (chartProperties.nestedDataByDate[i].key == d.toISOString().substring(0, 10)) {
