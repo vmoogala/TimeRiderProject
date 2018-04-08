@@ -274,6 +274,13 @@ axisControls.yAxisChangeThresholdValue = function() {
 	// console.log("entered axisControls.yAxisChangeThresholdValue");
 	var minY = $("#input-y-axis-lower-threshold").val();
 	var maxY = $("#input-y-axis-upper-threshold").val();
+	if(minY == ""){
+		minY = CONSTANTS.rangeValues[chartProperties.yAxisCurrentValue][0];
+	}
+	if(maxY == ""){
+        maxY = CONSTANTS.rangeValues[chartProperties.yAxisCurrentValue][1];
+	}
+
 	console.log(minY, maxY);
 	d3.select("#yAxisRangeBox").remove();
 	axisControls.showRangesForYaxis(minY, maxY);
@@ -283,8 +290,15 @@ axisControls.yAxisChangeThresholdValue = function() {
 axisControls.xAxisChangeThresholdValue = function() {
 	// console.log("entered axisControls.xAxisChangeThresholdValue");
 	var minX = $("#input-x-axis-lower-threshold").val();
-	var minY = $("#input-x-axis-upper-threshold").val();
+	var maxX = $("#input-x-axis-upper-threshold").val();
+	if(minX == ""){
+		minX = CONSTANTS.rangeValues[chartProperties.xAxisCurrentValue][0];
+	}
+	if(maxX == ""){
+        maxX = CONSTANTS.rangeValues[chartProperties.xAxisCurrentValue][1];
+	}
 	d3.select("#xAxisRangeBox").remove();
+	axisControls.showRangesForYaxis(minX, maxX);
 	console.log(minX, maxX);
 }
 
@@ -327,7 +341,7 @@ axisControls.xAxisRangeChecked = function() {
 	var x = document.getElementById("x-axis-range-checkbox");
 	if (x.checked) {
 		console.log("show divs");
-		axisControls.yAxisChangeThresholdValue();
+		axisControls.xAxisChangeThresholdValue();
 	} else {
 		console.log("hide divs");
 		d3.select("#xAxisRangeBox").remove();
