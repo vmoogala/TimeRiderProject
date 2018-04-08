@@ -24,7 +24,8 @@ CONSTANTS.circleRadius = {
 };
 
 CONSTANTS.squareSize = {
-	SMALL: "10px",
+	SMALL: "6px",
+	MEDIUM: "10px",
 	LARGE: "16px",
 	ZERO: "0px"
 };
@@ -430,18 +431,23 @@ tooltipFunctions.getHtmlStringForToolTip = function(d_in) {
 
 	temp(["Nikotin", "SH", "Met", "Glit", "DPP4", "Acarb", "ACE", "Bbl", "RR_sonst", "Statin", "ASS", "Protein_in_urine", "VZI", "ALT", "Misch", "Retinopathie", "Insult", "KHK", "PAVK", "PNP", "Nephropathie"]);
 
-	var html = '<div class="heading-tooltip"><p>Date: <b>' + d.Date +
-		'</b><br/><b>' + d.ID + ': ' + d.Name +
+	var html = '<div class="heading-tooltip"><p>Date: <b>' + d.Date;
+
+	if(d.opacity < 1){
+	 html = html + "<span style='color: red;'> **Predicted** </span>";
+	}
+	
+	html = html + '</b><br/><b>' + d.ID + ': ' + d.Name +
 		'</b>, ' + d.Gender +
 		'<br/>Date of birth: ' + d.Birthday +
 		'</p></div><div class="left-tooltip"><div><span class="header-text-tooltip">Biometric data</span><div class ="key-names-tooltip"> Body Mass Index <br/>Size[cm] <br/>Weight[kg] <br/>BP syst. [mmHg] <br/>BP diast. [mmHg] <br/>Smoker <br/></div><div class ="value-names-tooltip">' +
-		d.BMI + ' <br/>' + d.Size + ' <br/>' + d.Weight + '<br/>' + d.RR_syst + '<br/>' + d.RR_diast + '<br/>' + d.Nikotin +
+		d.BMI.toPrecision(4) + ' <br/>' + d.Size.toPrecision(4) + ' <br/>' + d.Weight.toPrecision(4) + '<br/>' + d.RR_syst.toPrecision(4) + '<br/>' + d.RR_diast.toPrecision(4) + '<br/>' + d.Nikotin +
 		'<br/></div></div><div><span class="header-text-tooltip">OAD therapy</span><div class ="key-names-tooltip">SH <br/>Met <br/>Glit <br/>DPP4 <br/>Acarb <br/></div><div class ="value-names-tooltip">' +
 		d.SH + ' <br/>' + d.Met + ' <br/>' + d.Glit + '<br/>' + d.DPP4 + '<br/>' + d.Acarb + '<br/>' +
 		'</div></div><div><span class="header-text-tooltip">Concomitant medication</span><div class ="key-names-tooltip">ACE <br/>Bbl <br/>BP Other <br/>Statin <br/>ASS <br/></div><div class ="value-names-tooltip">' +
 		d.ACE + ' <br/>' + d.Bbl + ' <br/>' + d.RR_sonst + '<br/>' + d.Statin + '<br/>' + d.ASS + '<br/>' +
 		'</div></div></div><div class="right-tooltip"><div><span class="header-text-tooltip">Laboratory</span><div class ="key-names-tooltip">Blood sugar [mg/dl] <br/>HbA1c[%] <br/>Cholesterol [mg/dl] <br/>Triglyceride [mg/dl] <br/>Creatinine [mg/dl] <br/>Protein in urine <br/></div><div class ="value-names-tooltip">' +
-		d.NBZ + ' <br/>' + d.HbA1c + ' <br/>' + d.Chol + '<br/>' + d.TG + '<br/>' + d.Crea + '<br/>' + d.Protein_in_urine +
+		d.NBZ.toPrecision(4) + ' <br/>' + d.HbA1c.toPrecision(4) + ' <br/>' + d.Chol.toPrecision(4) + '<br/>' + d.TG.toPrecision(4) + '<br/>' + d.Crea.toPrecision(2) + '<br/>' + d.Protein_in_urine +
 		'<br/></div></div><div><span class="header-text-tooltip">Insulin therapy</span><div class ="key-names-tooltip">VZI <br/>ALT <br/>Misch <br/></div><div class ="value-names-tooltip">' +
 		d.VZI + '<br/>' + d.ALT + '<br/>' + d.Misch + '<br/>' +
 		'</div></div><div><span class="header-text-tooltip">Organ Damages</span><div class ="key-names-tooltip">Retinopathy <br/>Stroke <br/>Coronary Heart D. <br/>PAOD <br/>Polyneuropathy <br/>Nephropathie <br/></div><div class ="value-names-tooltip">' +
@@ -864,25 +870,26 @@ function drawChart(data) {
 var marksFunctions = {};
 
 marksFunctions.fillOptions = function(d) {
-	var color;
 	if (marksControls.colorOption != "none") {
 		switch (marksControls.colorOption) {
-			case "smoker":
-				if (d.Nikotin == "Yes") {
-					color = CONSTANTS.colors.LIGHT_PINK
-				} else {
-					color = CONSTANTS.colors.LIGHT_GREEN
-				}
-				break;
 			case "gender":
-				if (d.Gender == "Male") {
-					color = CONSTANTS.colors.LIGHT_PINK
-				} else {
-					color = CONSTANTS.colors.LIGHT_GREEN
+				if (d.Gender == "male") {
+					return CONSTANTS.colors.LIGHT_PINK;
+				} else if(d.Gender == "female"){
+					return CONSTANTS.colors.LIGHT_GREEN;
+				}else{
+					return CONSTANTS.colors.BLACK;
 				}
 				break;
+			default:
+				if(d[marksControls.colorOption] == 'T'){
+					return CONSTANTS.colors.LIGHT_GREEN;
+				}else if(d[marksControls.colorOption] == 'F'){
+					return CONSTANTS.colors.LIGHT_PINK;
+				}else{
+					return CONSTANTS.colors.BLACK;
+				}
 		}
-		return color;
 	} else {
 		return CONSTANTS.colors.BLACK;
 	}
