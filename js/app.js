@@ -81,10 +81,9 @@ function takeScreenShot() {
 	html2canvas(document.body).then(function(canvas) {
 		// document.body.appendChild(canvas);
 		// var img = canvas.toDataURL("image/png");
-		var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream"); //Convert image to 'octet-stream' (Just a download, really)
+		var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+		//Convert image to 'octet-stream' (Just a download, really)
 		window.location.href = image;
-		// console.log(img);
-		// document.write('<img src="'+image+'"/>');
 	});
 }
 
@@ -152,7 +151,7 @@ mediaControls.mediaClicked = function(mediaImg) {
 mediaControls.playAutomatically = function() {
 	temp = mediaControls.currentSliderValue;
 	temp_max = chartProperties.days.length - 1;
-	if(temp == temp_max - 1){
+	if (temp == temp_max - 1) {
 		mediaControls.currentSliderValue = 0;
 		temp = mediaControls.currentSliderValue;
 	}
@@ -582,10 +581,10 @@ tooltipFunctions.getHtmlStringForToolTip = function(d_in) {
 
 	var html = '<div class="heading-tooltip"><p>Date: <b>' + d.Date;
 
-	if(d.opacity < 1){
-	 html = html + "<span style='color: red;'> **Predicted** </span>";
+	if (d.opacity < 1) {
+		html = html + "<span style='color: red;'> **Predicted** </span>";
 	}
-	
+
 	html = html + '</b><br/><b>' + d.ID + ': ' + d.Name +
 		'</b>, ' + d.Gender +
 		'<br/>Date of birth: ' + d.Birthday +
@@ -607,6 +606,7 @@ tooltipFunctions.getHtmlStringForToolTip = function(d_in) {
 }
 
 tooltipFunctions.appendLineChart = function(d) {
+	d3.select("#lineChartGroup").remove();
 	chartProperties.lineChartGroup = svg.append("g").attr("id", "lineChartGroup");
 	console.log("current data -->", d);
 	var currentPatientId = d.ID;
@@ -635,14 +635,11 @@ tooltipFunctions.appendLineChart = function(d) {
 		.attr("stroke-linejoin", "round")
 		.attr("stroke-linecap", "round")
 		.attr("stroke-width", 3)
+		// .transition()
+		// .duration(3000)
 		.attr("d", line);
 
-	// var dataForScatterPlot = [];
-	// thisPatientData.forEach(function(x) {
-	// 	if(x !== d){
-	// 		dataForScatterPlot.push(x);
-	// 	}
-	// });
+
 	chartProperties.lineChartGroup.selectAll("dot")
 		.data(thisPatientData)
 		.enter().append("circle")
@@ -670,7 +667,7 @@ tooltipFunctions.lineChartMouseOver = function(d) {
 		.style("opacity", .9);
 }
 
-tooltipFunctions.onLineChartMouseOut = function(){
+tooltipFunctions.onLineChartMouseOut = function() {
 	console.log("mouseout");
 	// tooltip.style("display", "none")
 	tooltip
@@ -851,8 +848,8 @@ function setDateOptionsForSlider(min_date, max_date) {
 	chartProperties.days = d3.timeDay.range(new Date(min_date), new Date(max_date));
 	total_days = chartProperties.days.length;
 	temp = []
-	chartProperties.days.forEach(function(d){
-		temp.push(d.toISOString().substring(0,10));
+	chartProperties.days.forEach(function(d) {
+		temp.push(d.toISOString().substring(0, 10));
 	})
 	// console.log(JSON.stringify(temp));
 	// console.log(total_days);
@@ -906,7 +903,6 @@ function drawChart(data) {
 
 	circles.enter()
 		.append("circle");
-	// .attr("r", 5); // removed for filtering values with 0's
 
 	circles.attr("class", "dot")
 		.attr("cx", function(d) {
@@ -918,48 +914,9 @@ function drawChart(data) {
 			return yScale(+d[chartProperties.yAxisCurrentValue]);
 		})
 		.attr("r", function(d) {
-			if (d[chartProperties.xAxisCurrentValue] == 0 || d[chartProperties.yAxisCurrentValue] == 0) {
-				return 0;
-			}
-			var size;
-			if (marksControls.shapeOption != "none") {
-				switch (marksControls.shapeOption) {
-					case "smoker":
-						if (d.Nikotin == "Yes") {
-							return CONSTANTS.circleRadius.ZERO;
-						}
-						break;
-					case "gender":
-						if (d.Gender == "Male") {
-							return CONSTANTS.circleRadius.ZERO;
-						}
-						break;
-				}
-			}
-			if (marksControls.sizeOption != "none") {
-				switch (marksControls.sizeOption) {
-					case "smoker":
-						if (d.Nikotin == "Yes") {
-							size = CONSTANTS.circleRadius.LARGE;
-						} else {
-							size = CONSTANTS.circleRadius.SMALL;
-						}
-						break;
-					case "gender":
-						if (d.Gender == "Male") {
-							size = CONSTANTS.circleRadius.SMALL;
-						} else {
-							size = CONSTANTS.circleRadius.LARGE;
-						}
-						break;
-				}
-				return size;
-			} else {
-				return CONSTANTS.circleRadius.MEDIUM;
-			}
-
+			return marksFunctions.circleSizeOptions(d);
 		})
-		.attr("opacity", function(d){
+		.attr("opacity", function(d) {
 			return d.opacity;
 		})
 		.attr("fill", function(d) {
@@ -983,17 +940,17 @@ function drawChart(data) {
 	squares.attr("class", "dot")
 		.attr("x", function(d) {
 			// console.log(+d[chartProperties.xAxisCurrentValue] * 50) - 5;
-			return xScale(+d[chartProperties.xAxisCurrentValue] * 10) - 5;
+			return xScale(+d[chartProperties.xAxisCurrentValue]) - 5;
 		})
 		.attr("y", function(d) {
 			// console.log(+d[chartProperties.yAxisCurrentValue] * 50) - 5;
-			return yScale(+d[chartProperties.yAxisCurrentValue] * 10) - 5;
+			return yScale(+d[chartProperties.yAxisCurrentValue]) - 5;
 		})
 		.attr("height", function(d) {
-			return marksFunctions.sizeOptions(d);
+			return marksFunctions.squareSizeOptions(d);
 		})
 		.attr("width", function(d) {
-			return marksFunctions.sizeOptions(d);
+			return marksFunctions.squareSizeOptions(d);
 		})
 		.attr("fill", function(d) {
 			return marksFunctions.fillOptions(d);
@@ -1024,18 +981,18 @@ marksFunctions.fillOptions = function(d) {
 			case "gender":
 				if (d.Gender == "male") {
 					return CONSTANTS.colors.LIGHT_PINK;
-				} else if(d.Gender == "female"){
+				} else if (d.Gender == "female") {
 					return CONSTANTS.colors.LIGHT_GREEN;
-				}else{
+				} else {
 					return CONSTANTS.colors.BLACK;
 				}
 				break;
 			default:
-				if(d[marksControls.colorOption] == 'T'){
+				if (d[marksControls.colorOption] == 'T') {
 					return CONSTANTS.colors.LIGHT_GREEN;
-				}else if(d[marksControls.colorOption] == 'F'){
+				} else if (d[marksControls.colorOption] == 'F') {
 					return CONSTANTS.colors.LIGHT_PINK;
-				}else{
+				} else {
 					return CONSTANTS.colors.BLACK;
 				}
 		}
@@ -1044,42 +1001,187 @@ marksFunctions.fillOptions = function(d) {
 	}
 }
 
-marksFunctions.sizeOptions = function(d) {
-	var size = CONSTANTS.squareSize.ZERO;
-	if (marksControls.shapeOption != "none") {
-		switch (marksControls.shapeOption) {
-			case "smoker":
-				if (d.Nikotin == "Yes") {
-					size = CONSTANTS.squareSize.SMALL;
-				}
-				break;
+marksFunctions.circleSizeOptions = function(d) {
+	if (d[chartProperties.xAxisCurrentValue] == 0 || d[chartProperties.yAxisCurrentValue] == 0) {
+		return 0;
+	}
+	if (marksControls.shapeOption == "none") {
+		if (marksControls.sizeOption == "none") {
+			return CONSTANTS.circleRadius.MEDIUM;
+		}
+		switch (marksControls.sizeOption) {
 			case "gender":
-				if (d.Gender == "Female") {
-					size = CONSTANTS.squareSize.SMALL;
+				if (d.Gender == "male") {
+					return CONSTANTS.circleRadius.SMALL;
+				} else if (d.Gender == "female") {
+					return CONSTANTS.circleRadius.LARGE;
+				} else {
+					return CONSTANTS.circleRadius.MEDIUM;
 				}
 				break;
+			default:
+				if (d[marksControls.colorOption] == 'T') {
+					return CONSTANTS.circleRadius.SMALL;
+				} else if (d.Gender == "female") {
+					return CONSTANTS.circleRadius.LARGE;
+				} else {
+					return CONSTANTS.circleRadius.MEDIUM;
+				}
+		}
+	} else {
+		switch (marksControls.shapeOption) {
+			case "gender":
+				if (d.Gender == "female") {
+					if (marksControls.sizeOption == "none") {
+						return CONSTANTS.circleRadius.MEDIUM;
+					} else {
+						switch (marksControls.sizeOption) {
+							case "gender":
+								if (d.Gender == "male") {
+									return CONSTANTS.circleRadius.SMALL;
+								} else if (d.Gender == "female") {
+									return CONSTANTS.circleRadius.LARGE;
+								} else {
+									return CONSTANTS.circleRadius.MEDIUM;
+								}
+								break;
+							default:
+								if (d[marksControls.colorOption] == 'T') {
+									return CONSTANTS.circleRadius.SMALL;
+								} else if (d.Gender == "female") {
+									return CONSTANTS.circleRadius.LARGE;
+								} else {
+									return CONSTANTS.circleRadius.MEDIUM;
+								}
+						}
+					}
+				} else {
+					return 0;
+				}
+				break;
+			default:
+				if (d[marksControls.shapeOption] == 'T') {
+					if (marksControls.sizeOption == none) {
+						return CONSTANTS.circleRadius.MEDIUM;
+					} else {
+						switch (marksControls.sizeOption) {
+							case "gender":
+								if (d.Gender == "male") {
+									return CONSTANTS.circleRadius.SMALL;
+								} else if (d.Gender == "female") {
+									return CONSTANTS.circleRadius.LARGE;
+								} else {
+									return CONSTANTS.circleRadius.MEDIUM;
+								}
+								break;
+							default:
+								if (d[marksControls.colorOption] == 'T') {
+									return CONSTANTS.circleRadius.SMALL;
+								} else if (d.Gender == "female") {
+									return CONSTANTS.circleRadius.LARGE;
+								} else {
+									return CONSTANTS.circleRadius.MEDIUM;
+								}
+						}
+					}
+				} else {
+					return 0;
+				}
+
 		}
 	}
-
-	if (size == CONSTANTS.squareSize.SMALL && marksControls.sizeOption != "none") {
-		switch (marksControls.shapeOption) {
-			case "smoker":
-				if (d.Nikotin == "Yes") {
-					size = CONSTANTS.squareSize.LARGE;
-				}
-				break;
-			case "gender":
-				if (d.Gender == "Female") {
-					size = CONSTANTS.squareSize.LARGE;
-				}
-				break;
-		}
-	}
-
-	return size;
 }
 
+marksFunctions.squareSizeOptions = function(d) {
+	if (d[chartProperties.xAxisCurrentValue] == 0 || d[chartProperties.yAxisCurrentValue] == 0 || marksControls.shapeOption == "none") {
+		return 0;
+	}
+	if (marksControls.shapeOption == "none") {
+		if (marksControls.sizeOption == "none") {
+			return CONSTANTS.squareSize.MEDIUM;
+		}
+		switch (marksControls.sizeOption) {
+			case "gender":
+				if (d.Gender == "male") {
+					return CONSTANTS.squareSize.SMALL;
+				} else if (d.Gender == "female") {
+					return CONSTANTS.squareSize.LARGE;
+				} else {
+					return CONSTANTS.squareSize.MEDIUM;
+				}
+				break;
+			default:
+				if (d[marksControls.colorOption] == 'T') {
+					return CONSTANTS.squareSize.SMALL;
+				} else if (d.Gender == "female") {
+					return CONSTANTS.squareSize.LARGE;
+				} else {
+					return CONSTANTS.squareSize.MEDIUM;
+				}
+		}
+	} else {
+		switch (marksControls.shapeOption) {
+			case "gender":
+				if (d.Gender == "male") {
+					if (marksControls.sizeOption == "none") {
+						return CONSTANTS.squareSize.MEDIUM;
+					} else {
+						switch (marksControls.sizeOption) {
+							case "gender":
+								if (d.Gender == "male") {
+									return CONSTANTS.squareSize.SMALL;
+								} else if (d.Gender == "female") {
+									return CONSTANTS.squareSize.LARGE;
+								} else {
+									return CONSTANTS.squareSize.MEDIUM;
+								}
+								break;
+							default:
+								if (d[marksControls.colorOption] == 'T') {
+									return CONSTANTS.squareSize.SMALL;
+								} else if (d.Gender == "female") {
+									return CONSTANTS.squareSize.LARGE;
+								} else {
+									return CONSTANTS.squareSize.MEDIUM;
+								}
+						}
+					}
+				} else {
+					return 0;
+				}
+				break;
+			default:
+				if (d[marksControls.shapeOption] == 'T') {
+					if (marksControls.sizeOption == none) {
+						return CONSTANTS.squareSize.MEDIUM;
+					} else {
+						switch (marksControls.sizeOption) {
+							case "gender":
+								if (d.Gender == "male") {
+									return CONSTANTS.squareSize.SMALL;
+								} else if (d.Gender == "female") {
+									return CONSTANTS.squareSize.LARGE;
+								} else {
+									return CONSTANTS.squareSize.MEDIUM;
+								}
+								break;
+							default:
+								if (d[marksControls.colorOption] == 'T') {
+									return CONSTANTS.squareSize.SMALL;
+								} else if (d.Gender == "female") {
+									return CONSTANTS.squareSize.LARGE;
+								} else {
+									return CONSTANTS.squareSize.MEDIUM;
+								}
+						}
+					}
+				} else {
+					return 0;
+				}
 
+		}
+	}
+}
 /**
  **************************************************************************************
  **************************************************************************************
