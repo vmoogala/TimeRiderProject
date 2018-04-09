@@ -288,6 +288,27 @@ axisControls.xAxisOptionsChanged = function() {
 	drawChart(chartProperties.data);
 }
 
+axisControls.yAxisRangeChecked = function() {
+	console.log("entered yAxisRangeChecked");
+	if ($("#y-axis-range-checkbox").is(':checked')) {
+		console.log("show divs");
+		axisControls.yAxisChangeThresholdValue();
+	} else {
+		console.log("hide divs");
+		d3.select("#yAxisRangeBox").remove();
+	}
+}
+
+axisControls.xAxisRangeChecked = function() {
+	console.log("entered xAxisRangeChecked");
+	if ($("#x-axis-range-checkbox").is(':checked')) {
+		console.log("show divs");
+		axisControls.xAxisChangeThresholdValue();
+	} else {
+		console.log("hide divs");
+		d3.select("#xAxisRangeBox").remove();
+	}
+}
 
 axisControls.yAxisChangeThresholdValue = function() {
 	// console.log("entered axisControls.yAxisChangeThresholdValue");
@@ -322,30 +343,11 @@ axisControls.xAxisChangeThresholdValue = function() {
 }
 
 
-axisControls.yAxisRangeChecked = function() {
-	console.log("entered yAxisRangeChecked");
-	if ($("#y-axis-range-checkbox").is(':checked')) {
-		console.log("show divs");
-		axisControls.yAxisChangeThresholdValue();
-	} else {
-		console.log("hide divs");
-		d3.select("#yAxisRangeBox").remove();
-	}
-}
-
-axisControls.xAxisRangeChecked = function() {
-	console.log("entered xAxisRangeChecked");
-	if ($("#x-axis-range-checkbox").is(':checked')) {
-		console.log("show divs");
-		axisControls.xAxisChangeThresholdValue();
-	} else {
-		console.log("hide divs");
-		d3.select("#xAxisRangeBox").remove();
-	}
-}
-
 axisControls.showRangesForYaxis = function(minY, maxY) {
 	console.log("entered showRangesForYaxis");
+	d3.select("#yAxisUpperRiskRangeBox").remove();
+	d3.select("#xAxisUpperRiskRangeBox").remove();
+	d3.select("#yAxisRangeBox").remove();
 	axisControls.yAxisRangeBox = svg.append("g")
 	axisControls.yAxisRangeBox.append("rect")
 		.attr("id", "yAxisRangeBox")
@@ -368,6 +370,7 @@ axisControls.showRangesForXaxis = function(minX, maxX) {
 	axisControls.xAxisRangeBox = svg.append("g")
 	axisControls.xAxisRangeBox.append("rect")
 		.attr("id", "xAxisRangeBox")
+		.attr("class", "x-axis-range-box")
 		.attr("y", function() {
 			return yScale(yScale.domain()[0]);
 		})
@@ -377,8 +380,7 @@ axisControls.showRangesForXaxis = function(minX, maxX) {
 		.attr("height", yScale(yScale.domain()[1]))
 		.attr("width", function() {
 			return xScale(maxX) - xScale(minX);
-		})
-		.attr("class", "x-axis-range-box")
+		});
 }
 
 axisControls.setDefaultThresholdsForAxes = function() {
@@ -402,30 +404,28 @@ axisControls.xAxisRiskRangesChecked = function() {
 		// $("#x-axis-range-checkbox").prop("checked", false);
 	}
 
-
-
 }
 
 axisControls.yAxisRiskRangesChecked = function() {
 	console.log("entered axisControls.yAxisRiskRangesChecked");
 
-	if ($("#input-x-axis-show-risk-ranges").is(':checked')) {
-		if ($("#y-axis-range-checkbox").is(':checked')) {
+	if ($("#y-axis-range-checkbox").is(':checked')) {
+		if ($("#input-y-axis-show-risk-ranges").is(':checked')) {
 			d3.select("#yAxisRangeBox").remove();
 			axisControls.showRiskRangesForYAxis();
 		} else {
-			console.log("y axis range checkbox must be checked");
-			// $("#y-axis-range-checkbox").prop('checked', false);
+			d3.select("#yAxisUpperRiskRangeBox").remove();
+			d3.select("#yAxisLowerRiskRangeBox").remove();
+			axisControls.yAxisChangeThresholdValue();
 		}
-
 	} else {
-		d3.select("#yAxisUpperRiskRangeBox").remove();
-		axisControls.yAxisChangeThresholdValue();
+		console.log("y axis range checkbox must be checked");
+		// $("#y-axis-range-checkbox").prop('checked', false);
 	}
 
 }
 
-axisControls.showRiskRangesForYAxis = function(){
+axisControls.showRiskRangesForYAxis = function() {
 	console.log("entered showRiskRangesForYAxis");
 
 	var minY = $("#input-y-axis-lower-threshold").val();
@@ -442,30 +442,30 @@ axisControls.showRiskRangesForYAxis = function(){
 		.attr("id", "yAxisUpperRiskRangeBox")
 		.attr("class", "y-axis-range-box")
 		.attr("x", function() {
-			return 0;//xScale(xScale.domain()[0]);
+			return xScale(xScale.domain()[0]);
 		})
 		.attr("y", function() {
-			return 0;//yScale(yScale.domain()[1]);
+			return yScale(yScale.domain()[0]);
 		})
-		.attr("width", 100)//xScale(xScale.domain()[1]))
+		.attr("width", xScale(xScale.domain()[1]))
 		.attr("height", function() {
-			return 50;//yScale(yScale.domain()[1]) - yScale(maxY);
+			return yScale(maxY);
 		})
 
-	// axisControls.yAxisLowerRiskRangeBox = svg.append("g")
-	// axisControls.yAxisLowerRiskRangeBox.append("rect")
-	// 	.attr("id", "yAxisLowerRiskRangeBox")
-	// 	.attr("class", "y-axis-range-box")
-	// 	.attr("x", function() {
-	// 		return xScale(xScale.domain()[0]);
-	// 	})
-	// 	.attr("y", function() {
-	// 		return yScale(minY);
-	// 	})
-	// 	.attr("width", xScale(xScale.domain()[1]))
-	// 	.attr("height", function() {
-	// 		return yScale(minY) - yScale(yScale.domain()[0]);
-	// 	})
+	axisControls.yAxisLowerRiskRangeBox = svg.append("g")
+	axisControls.yAxisLowerRiskRangeBox.append("rect")
+		.attr("id", "yAxisLowerRiskRangeBox")
+		.attr("class", "y-axis-range-box")
+		.attr("x", function() {
+			return xScale(xScale.domain()[0]);
+		})
+		.attr("y", function() {
+			return yScale(minY);
+		})
+		.attr("width", xScale(xScale.domain()[1]))
+		.attr("height", function() {
+			return yScale(yScale.domain()[1]) - yScale(minY);
+		})
 }
 
 
