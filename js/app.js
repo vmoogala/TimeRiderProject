@@ -346,7 +346,7 @@ axisControls.xAxisChangeThresholdValue = function() {
 axisControls.showRangesForYaxis = function(minY, maxY) {
 	console.log("entered showRangesForYaxis");
 	d3.select("#yAxisUpperRiskRangeBox").remove();
-	d3.select("#xAxisUpperRiskRangeBox").remove();
+	d3.select("#yAxisLowerRiskRangeBox").remove();
 	d3.select("#yAxisRangeBox").remove();
 	axisControls.yAxisRangeBox = svg.append("g")
 	axisControls.yAxisRangeBox.append("rect")
@@ -398,7 +398,14 @@ axisControls.xAxisRiskRangesChecked = function() {
 	console.log("entered axisControls.xAxisRiskRangesChecked");
 
 	if ($("#x-axis-range-checkbox").is(':checked')) {
-
+		if ($("#input-x-axis-show-risk-ranges").is(':checked')) {
+			d3.select("#xAxisRangeBox").remove();
+			axisControls.showRiskRangesForXAxis();
+		} else {
+			d3.select("#xAxisUpperRiskRangeBox").remove();
+			d3.select("#xAxisLowerRiskRangeBox").remove();
+			axisControls.xAxisChangeThresholdValue();
+		}
 	} else {
 		console.log("x axis range checkbox must be checked");
 		// $("#x-axis-range-checkbox").prop("checked", false);
@@ -465,6 +472,49 @@ axisControls.showRiskRangesForYAxis = function() {
 		.attr("width", xScale(xScale.domain()[1]))
 		.attr("height", function() {
 			return yScale(yScale.domain()[1]) - yScale(minY);
+		})
+}
+
+axisControls.showRiskRangesForXAxis = function() {
+	console.log("entered showRiskRangesForXAxis");
+
+	var minX = $("#input-x-axis-lower-threshold").val();
+	var maxX = $("#input-x-axis-upper-threshold").val();
+	if (minX == "") {
+		minX = CONSTANTS.rangeValues[chartProperties.xAxisCurrentValue][0];
+	}
+	if (maxX == "") {
+		maxX = CONSTANTS.rangeValues[chartProperties.xAxisCurrentValue][1];
+	}
+
+	axisControls.xAxisUpperRiskRangeBox = svg.append("g");
+	axisControls.xAxisUpperRiskRangeBox.append("rect")
+		.attr("id", "xAxisUpperRiskRangeBox")
+		.attr("class", "y-axis-range-box")
+		.attr("x", function() {
+			return xScale(maxX);
+		})
+		.attr("y", function() {
+			return yScale(yScale.domain()[0]);
+		})
+		.attr("width", xScale(xScale.domain()[1]) - xScale(maxX))
+		.attr("height", function() {
+			return yScale(yScale.domain()[1]);
+		})
+
+	axisControls.xAxisLowerRiskRangeBox = svg.append("g")
+	axisControls.xAxisLowerRiskRangeBox.append("rect")
+		.attr("id", "xAxisLowerRiskRangeBox")
+		.attr("class", "y-axis-range-box")
+		.attr("x", function() {
+			return xScale(xScale.domain()[0]);
+		})
+		.attr("y", function() {
+			return yScale(yScale.domain()[0]);
+		})
+		.attr("width", xScale(minX))
+		.attr("height", function() {
+			return yScale(yScale.domain()[1]);
 		})
 }
 
