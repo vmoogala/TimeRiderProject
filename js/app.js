@@ -59,7 +59,11 @@ var tempoSlider = document.getElementById("tempoSlider");
 
 // Update the current slider value (each time you drag the slider handle)
 tempoSlider.oninput = function() {
-	mediaControls.tempoValue = tempoSlider.value;
+	var x = {};
+	x.id = "mediaPlayPause";
+	mediaControls.mediaClicked(x);
+	mediaControls.tempoValue = (100 - tempoSlider.value);
+	mediaControls.mediaClicked(x);
 	console.log(tempoSlider.value);
 }
 
@@ -124,7 +128,6 @@ mediaControls.mediaClicked = function(mediaImg) {
 				clearInterval(mediaControls.setIntervalId);
 				mediaControls.mediaIsPlaying = false;
 			} else {
-				
 				$("#mediaPlayPause").attr("src", "images/ic_pause_black_24dp_2x.png");
 				mediaControls.playAutomatically();
 				mediaControls.mediaIsPlaying = true;
@@ -149,6 +152,10 @@ mediaControls.mediaClicked = function(mediaImg) {
 mediaControls.playAutomatically = function() {
 	temp = mediaControls.currentSliderValue;
 	temp_max = chartProperties.days.length - 1;
+	if(temp == temp_max - 1){
+		mediaControls.currentSliderValue = 0;
+		temp = mediaControls.currentSliderValue;
+	}
 	mediaControls.setIntervalId = window.setInterval(function() {
 		if (temp < temp_max) {
 			$('#timeLineSlider').val(temp);
@@ -156,7 +163,10 @@ mediaControls.playAutomatically = function() {
 			mediaControls.currentSliderValue = temp;
 			temp = temp + 1;
 		} else {
-			clearInterval(mediaControls.setIntervalId)
+			clearInterval(mediaControls.setIntervalId);
+			// $('#timeLineSlider').val(0);
+			$("#mediaPlayPause").attr("src", "images/ic_play_arrow_black_24dp_2x.png");
+			mediaControls.mediaIsPlaying = false;
 		}
 	}, mediaControls.tempoValue);
 
@@ -250,7 +260,7 @@ axisControls.yAxisOptionsChanged = function() {
 	yAxisGroup.transition().call(yAxis);
 	ygridlinesGroup.transition().call(ygridlines);
 
-	if($("#y-axis-range-checkbox").is(':checked')){
+	if ($("#y-axis-range-checkbox").is(':checked')) {
 		axisControls.yAxisChangeThresholdValue();
 	}
 	drawChart(chartProperties.data);
@@ -271,7 +281,7 @@ axisControls.xAxisOptionsChanged = function() {
 	xAxisGroup.transition().call(xAxis);
 	xgridlinesGroup.transition().call(xgridlines);
 
-	if($("#x-axis-range-checkbox").is(':checked')){
+	if ($("#x-axis-range-checkbox").is(':checked')) {
 		axisControls.xAxisChangeThresholdValue();
 	}
 
@@ -283,11 +293,11 @@ axisControls.yAxisChangeThresholdValue = function() {
 	// console.log("entered axisControls.yAxisChangeThresholdValue");
 	var minY = $("#input-y-axis-lower-threshold").val();
 	var maxY = $("#input-y-axis-upper-threshold").val();
-	if(minY == ""){
+	if (minY == "") {
 		minY = CONSTANTS.rangeValues[chartProperties.yAxisCurrentValue][0];
 	}
-	if(maxY == ""){
-        maxY = CONSTANTS.rangeValues[chartProperties.yAxisCurrentValue][1];
+	if (maxY == "") {
+		maxY = CONSTANTS.rangeValues[chartProperties.yAxisCurrentValue][1];
 	}
 
 	console.log(minY, maxY);
@@ -300,11 +310,11 @@ axisControls.xAxisChangeThresholdValue = function() {
 	// console.log("entered axisControls.xAxisChangeThresholdValue");
 	var minX = $("#input-x-axis-lower-threshold").val();
 	var maxX = $("#input-x-axis-upper-threshold").val();
-	if(minX == ""){
+	if (minX == "") {
 		minX = CONSTANTS.rangeValues[chartProperties.xAxisCurrentValue][0];
 	}
-	if(maxX == ""){
-        maxX = CONSTANTS.rangeValues[chartProperties.xAxisCurrentValue][1];
+	if (maxX == "") {
+		maxX = CONSTANTS.rangeValues[chartProperties.xAxisCurrentValue][1];
 	}
 	d3.select("#xAxisRangeBox").remove();
 	axisControls.showRangesForXaxis(minX, maxX);
@@ -314,7 +324,7 @@ axisControls.xAxisChangeThresholdValue = function() {
 
 axisControls.yAxisRangeChecked = function() {
 	console.log("entered yAxisRangeChecked");
-	if($("#y-axis-range-checkbox").is(':checked')) {
+	if ($("#y-axis-range-checkbox").is(':checked')) {
 		console.log("show divs");
 		axisControls.yAxisChangeThresholdValue();
 	} else {
@@ -325,7 +335,7 @@ axisControls.yAxisRangeChecked = function() {
 
 axisControls.xAxisRangeChecked = function() {
 	console.log("entered xAxisRangeChecked");
-	if($("#x-axis-range-checkbox").is(':checked')) {
+	if ($("#x-axis-range-checkbox").is(':checked')) {
 		console.log("show divs");
 		axisControls.xAxisChangeThresholdValue();
 	} else {
@@ -349,8 +359,7 @@ axisControls.showRangesForYaxis = function(minY, maxY) {
 		.attr("width", xScale(xScale.domain()[1]))
 		.attr("height", function() {
 			return yScale(minY) - yScale(maxY);
-		})
-
+		});
 }
 
 
