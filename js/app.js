@@ -249,6 +249,10 @@ axisControls.yAxisOptionsChanged = function() {
 
 	yAxisGroup.transition().call(yAxis);
 	ygridlinesGroup.transition().call(ygridlines);
+
+	if($("#y-axis-range-checkbox").is(':checked')){
+		axisControls.yAxisChangeThresholdValue();
+	}
 	drawChart(chartProperties.data);
 }
 
@@ -266,6 +270,11 @@ axisControls.xAxisOptionsChanged = function() {
 
 	xAxisGroup.transition().call(xAxis);
 	xgridlinesGroup.transition().call(xgridlines);
+
+	if($("#x-axis-range-checkbox").is(':checked')){
+		axisControls.xAxisChangeThresholdValue();
+	}
+
 	drawChart(chartProperties.data);
 }
 
@@ -298,15 +307,14 @@ axisControls.xAxisChangeThresholdValue = function() {
         maxX = CONSTANTS.rangeValues[chartProperties.xAxisCurrentValue][1];
 	}
 	d3.select("#xAxisRangeBox").remove();
-	axisControls.showRangesForYaxis(minX, maxX);
+	axisControls.showRangesForXaxis(minX, maxX);
 	console.log(minX, maxX);
 }
 
 
 axisControls.yAxisRangeChecked = function() {
 	console.log("entered yAxisRangeChecked");
-	var x = document.getElementById("y-axis-range-checkbox");
-	if (x.checked) {
+	if($("#y-axis-range-checkbox").is(':checked')) {
 		console.log("show divs");
 		axisControls.yAxisChangeThresholdValue();
 	} else {
@@ -315,6 +323,16 @@ axisControls.yAxisRangeChecked = function() {
 	}
 }
 
+axisControls.xAxisRangeChecked = function() {
+	console.log("entered xAxisRangeChecked");
+	if($("#x-axis-range-checkbox").is(':checked')) {
+		console.log("show divs");
+		axisControls.xAxisChangeThresholdValue();
+	} else {
+		console.log("hide divs");
+		d3.select("#xAxisRangeBox").remove();
+	}
+}
 
 axisControls.showRangesForYaxis = function(minY, maxY) {
 	console.log("entered showRangesForYaxis");
@@ -335,18 +353,6 @@ axisControls.showRangesForYaxis = function(minY, maxY) {
 
 }
 
-
-axisControls.xAxisRangeChecked = function() {
-	console.log("entered xAxisRangeChecked");
-	var x = document.getElementById("x-axis-range-checkbox");
-	if (x.checked) {
-		console.log("show divs");
-		axisControls.xAxisChangeThresholdValue();
-	} else {
-		console.log("hide divs");
-		d3.select("#xAxisRangeBox").remove();
-	}
-}
 
 axisControls.showRangesForXaxis = function(minX, maxX) {
 	console.log("entered showRangesForXaxis");
