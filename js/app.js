@@ -385,11 +385,81 @@ axisControls.setDefaultThresholdsForAxes = function() {
 
 axisControls.xAxisRiskRangesChecked = function() {
 	console.log("entered axisControls.xAxisRiskRangesChecked");
+
+	if ($("#x-axis-range-checkbox").is(':checked')) {
+
+	} else {
+		console.log("x axis range checkbox must be checked");
+		// $("#x-axis-range-checkbox").prop("checked", false);
+	}
+
+
+
 }
 
 axisControls.yAxisRiskRangesChecked = function() {
 	console.log("entered axisControls.yAxisRiskRangesChecked");
+
+	if ($("#input-x-axis-show-risk-ranges").is(':checked')) {
+		if ($("#y-axis-range-checkbox").is(':checked')) {
+			d3.select("#yAxisRangeBox").remove();
+			axisControls.showRiskRangesForYAxis();
+		} else {
+			console.log("y axis range checkbox must be checked");
+			// $("#y-axis-range-checkbox").prop('checked', false);
+		}
+
+	} else {
+		d3.select("#yAxisUpperRiskRangeBox").remove();
+		axisControls.yAxisChangeThresholdValue();
+	}
+
 }
+
+axisControls.showRiskRangesForYAxis = function(){
+	console.log("entered showRiskRangesForYAxis");
+
+	var minY = $("#input-y-axis-lower-threshold").val();
+	var maxY = $("#input-y-axis-upper-threshold").val();
+	if (minY == "") {
+		minY = CONSTANTS.rangeValues[chartProperties.yAxisCurrentValue][0];
+	}
+	if (maxY == "") {
+		maxY = CONSTANTS.rangeValues[chartProperties.yAxisCurrentValue][1];
+	}
+
+	axisControls.yAxisUpperRiskRangeBox = svg.append("g")
+	axisControls.yAxisUpperRiskRangeBox.append("rect")
+		.attr("id", "yAxisUpperRiskRangeBox")
+		.attr("class", "y-axis-range-box")
+		.attr("x", function() {
+			return 0;//xScale(xScale.domain()[0]);
+		})
+		.attr("y", function() {
+			return 0;//yScale(yScale.domain()[1]);
+		})
+		.attr("width", 100)//xScale(xScale.domain()[1]))
+		.attr("height", function() {
+			return 50;//yScale(yScale.domain()[1]) - yScale(maxY);
+		})
+
+	// axisControls.yAxisLowerRiskRangeBox = svg.append("g")
+	// axisControls.yAxisLowerRiskRangeBox.append("rect")
+	// 	.attr("id", "yAxisLowerRiskRangeBox")
+	// 	.attr("class", "y-axis-range-box")
+	// 	.attr("x", function() {
+	// 		return xScale(xScale.domain()[0]);
+	// 	})
+	// 	.attr("y", function() {
+	// 		return yScale(minY);
+	// 	})
+	// 	.attr("width", xScale(xScale.domain()[1]))
+	// 	.attr("height", function() {
+	// 		return yScale(minY) - yScale(yScale.domain()[0]);
+	// 	})
+}
+
+
 
 /*
  *****************************************************************************
