@@ -6,6 +6,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>TimeRider</title>
 		<link href="css/bootstrap.css" rel="stylesheet">
+		<link href="css/jquery-ui.css" rel="stylesheet">
 		<link href="css/app.css" rel="stylesheet">
 		<script type="text/javascript" src="js/d3/d3.js"></script>
 		<!-- <script type="text/javascript" src= "preProcessing1.js"></script> -->
@@ -74,6 +75,9 @@
 							<option value="Retinopathie">Retinopathie</option>
 							<option value="Insult">Insult</option>
 						</select>
+						<svg id="colorsLegendSvg" style="width: 100%; height:60px">
+							
+						</svg>
 						<br/>
 						<div class="marks-options-colors">
 							
@@ -81,10 +85,15 @@
 						<label for="select">Shape</label>
 						<select id="marks-options-shape" onchange="marksControls.shapeOptionsChanged()">
 							<option value="none">None</option>
-							<option value="smoker">Smoker</option>
+							<option value="Nikotin">Smoker</option>
 							<option value="gender">Gender</option>
-							<option value="stroke">Stroke</option>
+							<option value="Protein_in_urine">Protein in Urine</option>
+							<option value="Retinopathie">Retinopathie</option>
+							<option value="Insult">Insult</option>
 						</select>
+						<svg id="shapesLegendSvg" style="width: 100%; height:60px">
+							
+						</svg>
 						<br/>
 						<div class="marks-options-shape">
 							
@@ -92,10 +101,15 @@
 						<label for="select">Size</label>
 						<select id="marks-options-size" onchange="marksControls.sizeOptionsChanged()">
 							<option value="none">None</option>
-							<option value="smoker">Smoker</option>
+							<option value="Nikotin">Smoker</option>
 							<option value="gender">Gender</option>
-							<option value="stroke">Stroke</option>
+							<option value="Protein_in_urine">Protein in Urine</option>
+							<option value="Retinopathie">Retinopathie</option>
+							<option value="Insult">Insult</option>
 						</select>
+						<svg id="sizeLegendSvg" style="width: 100%; height:60px">
+							
+						</svg>
 						<br/>
 						<div class="marks-options-size">
 							
@@ -106,7 +120,11 @@
 					<div id="svg-div"></div>
 				</div>
 				<div class="col-md-2 right-pane">
-					<div id="filter-options">
+					<div>
+						<p class="align-middle">Filters to be added in future work</p>
+						
+					</div>
+					<div id="filter-options" style="display: none;">
 						<h5>Filter</h5>
 						<select id="select">
 							<option value="">add filter</option>
@@ -115,7 +133,7 @@
 							<option value="">Option 3</option>
 						</select>
 					</div>
-					<div id="stroke-options">
+					<div id="stroke-options" style="display: none;">
 						<h5>Stroke</h5>
 						<label>
 							<input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked="">
@@ -128,131 +146,147 @@
 						<br/>
 						<button type="button" class="btn btn-primary btn-sm" id="btn_remove">Remove</button>
 					</div>
-				</div>
-			</div>
-			<div class="row bottom-row">
-				<div class="col-md-3" >
-					<label>
-						<input type="checkbox" value="">
-						show traces by mouseover
+					<div id="BMI-filter-options" style="display: none;">
+						<h5>BMI</h5>
+						<p>
+							<label for="amount">Price range:</label>
+							<input type="text" id="amount" readonly style="border:0; color:#f6931f; font-weight:bold;">
+						</p>
+						<div id="bmi-filter-slider"></div>
 					</label>
-				</div>
-				<div class="col-md-4" >
-					<div class="zoomControls" style="display: none;">
-						<label>
-							Zoom options
-						</label>
-						<img class="zoom-in-out-images" src="images/increase-zoom-button.svg"
-						id="zoom-in-image" onclick="zoomControls.zoomClicked(this)"></img>
-						<img class="zoom-in-out-images" src="images/decrease-zoom.svg"
-						id="zoom-out-image" onclick="zoomControls.zoomClicked(this)"></img>
-					</div>
-				</div>
-				<div class="col-md-5" >
-					<label>
-						<input type="checkbox" value="" id="x-axis-range-checkbox" onclick="axisControls.xAxisRangeChecked()">
-						Ranges
-					</label>
-					<label for="select"><b>X-Axis</b></label>
-					<select id="x-axis-options-select" onchange="axisControls.xAxisOptionsChanged()">
-						<option value="BMI">Body Mass Index</option>
-						<option value="HbA1c">HbA1c[%]</option>
-						<option value="NBZ">Blood Sugar[mg/dl]</option>
-						<option value="Weight">Weight[kg]</option>
-						<option value="RR_syst">BP syst. [mmHg]</option>
-						<option value="RR_diast">BP diast. [mmHg]</option>
-						<option value="Size">Size [cm]</option>
-						<option value="Chol">Cholesterol [mg/dl]</option>
-						<option value="TG">Triglyceride [mg/dl]</option>
-						<option value="Crea">Creatinine [mg/dl]</option>
-					</select>
-					<div class="rangeOptions">
-						<label>
-							<input type="checkbox" id="input-x-axis-show-risk-ranges" value="" onclick="axisControls.xAxisRiskRangesChecked()">
-							color risk ranges
-						</label>
-						<label for="input">upper threshold</label>
-						<input type="text" id="input-x-axis-upper-threshold" class="axis-threshold-boxes" onblur="axisControls.xAxisChangeThresholdValue()">
-						
-						<label for="input">lower threshold</label>
-						<input type="text" id="input-x-axis-lower-threshold" class="axis-threshold-boxes" onblur="axisControls.xAxisChangeThresholdValue()">
-					</div>
-				</div>
-				<div class="col-md-2" >
-				</div>
-			</div>
-			<div class="row bottom-most-row">
-				<div class="col-md-10 bottom-left-pane">
-					<h5>Animation</h5>
-					<div class="row">
-						<div class="col-md-3">
-							<div>
-								<label for="slidecontainer">Tempo</label>
-								<div class="slidecontainer">
-									<input type="range" min="1" max="100" value="50" class="slider" id="tempoSlider">
-								</div>
-								<label for="select">Traces</label>
-								<select id="select">
-									<option value="">None</option>
-									<option value="">Option 2</option>
-									<option value="">Option 3</option>
-								</select>
-								<br/>
-								<label for="select" style="display: none;">Synch</label>
-								<select id="select" style="display: none;">
-									<option value="">calendar date</option>
-									<option value="">patient age</option>
-									<option value="">start of treatment</option>
-									<option value="">end of treatment</option>
-								</select>
-							</div>
-						</div>
-						<div class="col-md-7 centered">
-							
-							<div>
-								
-								<p id ="sliderDateIndicatorText" style="text-align: center;">Time Rider</p>
-								
-								<div class="slidecontainer">
-									<input type="range" class="slider" id="timeLineSlider">
-								</div>
-							</div>
-							<div>
-								<div class="timeSvg" id="timeSvg">
-								</div>
-							</div>
-							<div class="media-buttons">
-								<img class="media-button-images" src="images/ic_skip_previous_black_24dp_2x.png"
-								id = "mediaFastRewind" onclick="mediaControls.mediaClicked(this)"></img>
-								<img class="media-button-images" src="images/ic_fast_rewind_black_24dp_2x.png"
-								id = "mediaRewind" onclick="mediaControls.mediaClicked(this)"></img>
-								<img class="media-button-images" src="images/ic_play_arrow_black_24dp_2x.png"
-								id = "mediaPlayPause" onclick="mediaControls.mediaClicked(this)"></img>
-								<img class="media-button-images" src="images/ic_fast_forward_black_24dp_2x.png"
-								id = "mediaForward" onclick="mediaControls.mediaClicked(this)"></img>
-								<img class="media-button-images" src="images/ic_skip_next_black_24dp_2x.png"
-								id = "mediaFastForward" onclick="mediaControls.mediaClicked(this)"></img>
-							</div>
-						</div>
-						<div class="col-md-4">
-						</div>
-					</div>
-				</div>
-				<div class="col-md-2 bottom-right-pane">
-					<div style="padding-top: 5px;">
-						<b> Research Paper: </b><br>
-						<ul style="margin-left: -10px;">
-							<li><a href="http://ieg.ifs.tuwien.ac.at/research/timerider/" target="blank"> Visually Exploring Multivariate Trends in Patient Cohorts using Animated Scatter Plots</a></li>
-							<li><a href="https://dl.acm.org/citation.cfm?id=2021761" target="blank">ACM link</a></li>
-						</ul>
-					</div>
+					<br/>
+					<button type="button" class="btn btn-primary btn-sm" id="btn_remove">Remove</button>
 				</div>
 			</div>
 		</div>
-		<script src="js/jquery.min.js"></script>
-		<script src="js/tether.js"></script>
-		<script src="js/bootstrap.min.js"></script>
-		<script src="js/app.js"></script>
-		<script type="text/javascript" src="js/html2canvas.js"></script>
-	</body>
+		<div class="row bottom-row">
+			<div class="col-md-3" >
+				<label>
+					<input type="checkbox" value="">
+					show traces by mouseover
+				</label>
+				<div>
+					<button class="btn btn-secondary" onclick="takeScreenShot()"> Take ScreenShot</button>
+					<button class="btn btn-secondary" onclick="location.reload()"> Reset Everything</button>
+				</div>
+			</div>
+			<div class="col-md-4" >
+				<div class="zoomControls" style="display: none;">
+					<label>
+						Zoom options
+					</label>
+					<img class="zoom-in-out-images" src="images/increase-zoom-button.svg"
+					id="zoom-in-image" onclick="zoomControls.zoomClicked(this)"></img>
+					<img class="zoom-in-out-images" src="images/decrease-zoom.svg"
+					id="zoom-out-image" onclick="zoomControls.zoomClicked(this)"></img>
+				</div>
+			</div>
+			<div class="col-md-5" >
+				<label>
+					<input type="checkbox" value="" id="x-axis-range-checkbox" onclick="axisControls.xAxisRangeChecked()">
+					Ranges
+				</label>
+				<label for="select"><b>X-Axis</b></label>
+				<select id="x-axis-options-select" onchange="axisControls.xAxisOptionsChanged()">
+					<option value="BMI">Body Mass Index</option>
+					<option value="HbA1c">HbA1c[%]</option>
+					<option value="NBZ">Blood Sugar[mg/dl]</option>
+					<option value="Weight">Weight[kg]</option>
+					<option value="RR_syst">BP syst. [mmHg]</option>
+					<option value="RR_diast">BP diast. [mmHg]</option>
+					<option value="Size">Size [cm]</option>
+					<option value="Chol">Cholesterol [mg/dl]</option>
+					<option value="TG">Triglyceride [mg/dl]</option>
+					<option value="Crea">Creatinine [mg/dl]</option>
+				</select>
+				<div class="rangeOptions">
+					<label>
+						<input type="checkbox" id="input-x-axis-show-risk-ranges" value="" onclick="axisControls.xAxisRiskRangesChecked()">
+						color risk ranges
+					</label>
+					<label for="input">upper threshold</label>
+					<input type="text" id="input-x-axis-upper-threshold" class="axis-threshold-boxes" onblur="axisControls.xAxisChangeThresholdValue()">
+					
+					<label for="input">lower threshold</label>
+					<input type="text" id="input-x-axis-lower-threshold" class="axis-threshold-boxes" onblur="axisControls.xAxisChangeThresholdValue()">
+				</div>
+			</div>
+			<div class="col-md-2" >
+			</div>
+		</div>
+		<div class="row bottom-most-row">
+			<div class="col-md-10 bottom-left-pane">
+				<h5>Animation</h5>
+				<div class="row">
+					<div class="col-md-3">
+						<div>
+							<label for="slidecontainer">Tempo</label>
+							<div class="slidecontainer" style="margin-top: 8px">
+								<input type="range" min="1" max="100" value="50" class="slider" id="tempoSlider">
+							</div>
+							<!-- 							<label for="select">Traces</label>
+							<select id="select">
+									<option value="">None</option>
+									<option value="">Option 2</option>
+									<option value="">Option 3</option>
+							</select> -->
+							<br/>
+							<label for="select" style="display: none;">Synch</label>
+							<select id="select" style="display: none;">
+								<option value="">calendar date</option>
+								<option value="">patient age</option>
+								<option value="">start of treatment</option>
+								<option value="">end of treatment</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-md-7 centered">
+						
+						<div>
+							
+							<p id ="sliderDateIndicatorText" style="text-align: center;">Time Rider</p>
+							
+							<div class="slidecontainer">
+								<input type="range" class="slider" id="timeLineSlider">
+							</div>
+						</div>
+						<div>
+							<div class="timeSvg" id="timeSvg">
+							</div>
+						</div>
+						<div class="media-buttons">
+							<img class="media-button-images" src="images/ic_skip_previous_black_24dp_2x.png"
+							id = "mediaFastRewind" onclick="mediaControls.mediaClicked(this)"></img>
+							<img class="media-button-images" src="images/ic_fast_rewind_black_24dp_2x.png"
+							id = "mediaRewind" onclick="mediaControls.mediaClicked(this)"></img>
+							<img class="media-button-images" src="images/ic_play_arrow_black_24dp_2x.png"
+							id = "mediaPlayPause" onclick="mediaControls.mediaClicked(this)"></img>
+							<img class="media-button-images" src="images/ic_fast_forward_black_24dp_2x.png"
+							id = "mediaForward" onclick="mediaControls.mediaClicked(this)"></img>
+							<img class="media-button-images" src="images/ic_skip_next_black_24dp_2x.png"
+							id = "mediaFastForward" onclick="mediaControls.mediaClicked(this)"></img>
+						</div>
+					</div>
+					<div class="col-md-4">
+					</div>
+				</div>
+			</div>
+			<div class="col-md-2 bottom-right-pane">
+				<div style="padding-top: 5px;">
+					<b> Research Paper: </b><br>
+					<ul style="margin-left: -10px;">
+						<li><a href="http://ieg.ifs.tuwien.ac.at/research/timerider/" target="blank"> Visually Exploring Multivariate Trends in Patient Cohorts using Animated Scatter Plots</a></li>
+						<li><a href="https://dl.acm.org/citation.cfm?id=2021761" target="blank">ACM link</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="js/jquery.min.js"></script>
+	<script type="js/jquery-ui.js"></script>
+	<script src="js/tether.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/app.js"></script>
+	<script type="text/javascript" src="js/html2canvas.js"></script>
+</body>
 </html>

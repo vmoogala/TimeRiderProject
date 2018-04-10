@@ -688,7 +688,7 @@ tooltipFunctions.onLineChartMouseOut = function() {
  */
 
 var chartProperties = {
-	outerWidth: 900,
+	outerWidth: 925,
 	outerheight: 500,
 	margin: {
 		top: 30,
@@ -1061,7 +1061,7 @@ marksFunctions.circleSizeOptions = function(d) {
 				break;
 			default:
 				if (d[marksControls.shapeOption] == 'T') {
-					if (marksControls.sizeOption == none) {
+					if (marksControls.sizeOption == "none") {
 						return CONSTANTS.circleRadius.MEDIUM;
 					} else {
 						switch (marksControls.sizeOption) {
@@ -1152,7 +1152,7 @@ marksFunctions.squareSizeOptions = function(d) {
 				break;
 			default:
 				if (d[marksControls.shapeOption] == 'T') {
-					if (marksControls.sizeOption == none) {
+					if (marksControls.sizeOption == "none") {
 						return CONSTANTS.squareSize.MEDIUM;
 					} else {
 						switch (marksControls.sizeOption) {
@@ -1191,3 +1191,122 @@ marksFunctions.squareSizeOptions = function(d) {
  **************************************************************************************
  **************************************************************************************
  */
+
+/**
+ **************************************************************************************
+ **************************************************************************************
+ *
+ *  Legends for Marks
+ *
+ **************************************************************************************
+ **************************************************************************************
+ */
+var colorsLegendSvg = d3.select("#colorsLegendSvg")
+colorsLegendData = [{
+	color: CONSTANTS.colors.LIGHT_PINK,
+	text: "False/Male",
+	size: CONSTANTS.circleRadius.SMALL
+}, {
+	color: CONSTANTS.colors.LIGHT_GREEN,
+	text: "True/Female",
+	size: CONSTANTS.circleRadius.LARGE
+}, {
+	color: CONSTANTS.colors.BLACK,
+	text: "No Data",
+	size: CONSTANTS.circleRadius.MEDIUM
+}];
+
+colorsLegendSvg.selectAll("circle")
+	.data(colorsLegendData).enter()
+	.append("circle")
+	.attr("cx", 10)
+	.attr("cy", function(d, i) {
+		return 10 + i * 20;
+	})
+	.attr("r", 5)
+	.attr("fill", function(d) {
+		return d.color;
+	})
+
+colorsLegendSvg.selectAll("text")
+	.data(colorsLegendData).enter()
+	.append("text")
+	.attr("x", 20)
+	.attr("y", function(d, i) {
+		return 15 + i * 20;
+	})
+	.text(function(d) {
+		return d.text;
+	})
+	.attr("fill", function(d) {
+		return d.color;
+	})
+	.attr("font-size", "15px")
+
+
+var sizeLegendSvg = d3.select("#sizeLegendSvg")
+sizeLegendSvg.selectAll("circle")
+	.data(colorsLegendData).enter()
+	.append("circle")
+	.attr("cx", 10)
+	.attr("cy", function(d, i) {
+		return 10 + i * 20;
+	})
+	.attr("r", function(d){
+		return d.size;
+	})
+	.attr("fill", CONSTANTS.colors.BLACK)
+
+sizeLegendSvg.selectAll("text")
+	.data(colorsLegendData).enter()
+	.append("text")
+	.attr("x", 20)
+	.attr("y", function(d, i) {
+		return 15 + i * 20;
+	})
+	.text(function(d) {
+		return d.text;
+	})
+	.attr("fill", CONSTANTS.colors.BLACK)
+	.attr("font-size", function(d,i){
+		if(i==0){
+			return "12px";
+		}else if(i==1){
+			return "18px";
+		}else return "15px";
+	})
+
+
+// shapesLegendSvg
+var shapesLegendSvg = d3.select("#shapesLegendSvg")
+shapesLegendSvg.selectAll("circle")
+	.data(["1"]).enter()
+	.append("circle")
+	.attr("cx", 10)
+	.attr("cy", 15)
+	.attr("r", CONSTANTS.circleRadius.MEDIUM)
+	.attr("fill", CONSTANTS.colors.BLACK)
+
+shapesLegendSvg.selectAll("rect")
+	.data(["1"]).enter()
+	.append("rect")
+	.attr("x", 5)
+	.attr("y", 30)
+	.attr("height", CONSTANTS.squareSize.MEDIUM)
+	.attr("width", CONSTANTS.squareSize.MEDIUM)
+	.attr("fill", CONSTANTS.colors.BLACK)
+
+shapesLegendSvg.selectAll("text")
+	.data(["True/Female", "False/Male"]).enter()
+	.append("text")
+	.attr("x", 20)
+	.attr("y", function(d, i) {
+		return 20 + i * 20;
+	})
+	.text(function(d) {
+		return d;
+	})
+	.attr("fill", CONSTANTS.colors.BLACK)
+	.attr("font-size", "15px")
+
+

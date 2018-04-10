@@ -25,7 +25,7 @@ html, body {
 }
 
 svg {
-	border: 1px solid gray;
+	border: 0px solid gray;
 	border-radius: 5px;
 }
 
@@ -99,17 +99,23 @@ svg {
  **************************************************************************************
  */
 #y-axis-options {
-	margin-top: 20px;
+	margin-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 5px;
+	padding-right: 5px;
 	border: 1px solid gray;
 	border-radius: 5px;
-	height: 200px;
+	height: 190px;
 }
 
 #marks-options {
-	margin-top: 20px;
+	margin-top: 10px;
+	padding-top: 10px;
+	padding-left: 5px;
+	padding-right: 5px;
 	border: 1px solid gray;
 	border-radius: 5px;
-	height: 200px;
+/*	height: 200px;*/
 }
 
 #filter-options {
