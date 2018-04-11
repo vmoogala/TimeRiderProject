@@ -955,6 +955,9 @@ function drawChart(data) {
 		.attr("fill", function(d) {
 			return marksFunctions.fillOptions(d);
 		})
+		.attr("opacity", function(d) {
+			return d.opacity;
+		})
 		.on("mouseover", function(d) {
 			tooltipFunctions.onMouseOver(d)
 		})
@@ -1252,7 +1255,7 @@ sizeLegendSvg.selectAll("circle")
 	.attr("cy", function(d, i) {
 		return 10 + i * 20;
 	})
-	.attr("r", function(d){
+	.attr("r", function(d) {
 		return d.size;
 	})
 	.attr("fill", CONSTANTS.colors.BLACK)
@@ -1268,12 +1271,12 @@ sizeLegendSvg.selectAll("text")
 		return d.text;
 	})
 	.attr("fill", CONSTANTS.colors.BLACK)
-	.attr("font-size", function(d,i){
-		if(i==0){
+	.attr("font-size", function(d, i) {
+		if (i == 0) {
 			return "12px";
-		}else if(i==1){
+		} else if (i == 1) {
 			return "18px";
-		}else return "15px";
+		} else return "15px";
 	})
 
 
@@ -1308,5 +1311,3 @@ shapesLegendSvg.selectAll("text")
 	})
 	.attr("fill", CONSTANTS.colors.BLACK)
 	.attr("font-size", "15px")
-
-
