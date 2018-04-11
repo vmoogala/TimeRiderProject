@@ -884,6 +884,8 @@ function timeSliderOptionChanged(x) {
 	}
 }
 
+var squaresGroup = svg.append("g");
+
 // Scatter points
 function drawChart(data) {
 	// console.log("entered drawChart");
@@ -929,7 +931,7 @@ function drawChart(data) {
 
 	circles.exit().remove();
 
-	var squares = svg.selectAll("rect")
+	var squares = squaresGroup.selectAll("rect")
 		.data(chartProperties.data);
 
 	squares.enter()
