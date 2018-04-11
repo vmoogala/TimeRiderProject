@@ -35,13 +35,13 @@ CONSTANTS.rangeValues = { //Random values as input
 	"HbA1c": [4.0, 6.0],
 	"NBZ": [100, 200],
 	"BMI": [17, 25],
-	"Weight": [0, 0],
+	"Weight": [70, 110],
 	"RR_syst": [120, 140],
 	"RR_diast": [80, 90],
 	"Size": [160, 180],
 	"Chol": [150, 250],
-	"TG": [0, 0],
-	"Crea": [0, 0]
+	"TG": [100, 200],
+	"Crea": [0.5, 1.0]
 };
 
 /*
