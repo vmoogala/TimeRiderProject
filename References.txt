@@ -1,22 +1,25 @@
-http://freevector.co/?s=Increase+zoom+button&type=flaticons&utm_source=readme_file&utm_medium=return&utm_term=download%2Breturn&utm_campaign=refer
+Below Are the references which I have used in developing this project
 
+1. Source for images 
 https://material.io/icons/
 
-
+2. For drawing gridlines in the scatter plot
 https://bl.ocks.org/wadefagen/ce5d308d8080130de10f21254273e30c
 
-
+3. Initial idea about how a tootltip works
 https://bl.ocks.org/mbostock/1087001
 
-http://bl.ocks.org/williaster/af5b855651ffe29bdca1
-
+4. Converting NaN to 0 while parsing the data using d3.csv() method
 https://stackoverflow.com/questions/7540397/convert-nan-to-0-in-javascript
 
-http://bl.ocks.org/WilliamQLiu/59c87d2bcc00800ec3f9
-
-
+5. To convert the graph to an image (Screen shot functionality)
 https://stackoverflow.com/questions/923885/capture-html-canvas-as-gif-jpg-png-pdf
 
+6. To convert the graph to an image (Screen shot functionality)
 http://html2canvas.hertzen.com/
 
-https://github.com/niklasvh/html2canvas/
+7. Initial idea of how a line chart works
+https://bl.ocks.org/mbostock/3883245
+
+8. Dataset URL
+http://ieg.ifs.tuwien.ac.at/projects/timerider/diabetes-real-ano-en.txt

@@ -30,16 +30,16 @@ CONSTANTS.squareSize = {
 	ZERO: "0px"
 };
 
-CONSTANTS.rangeValues = {
+CONSTANTS.rangeValues = { //Random values as input
 	// [ lowerThreshold, upperThreshold ]
 	"HbA1c": [4.0, 6.0],
-	"NBZ": [0, 0],
+	"NBZ": [100, 200],
 	"BMI": [17, 25],
 	"Weight": [0, 0],
 	"RR_syst": [120, 140],
 	"RR_diast": [80, 90],
-	"Size": [0, 0],
-	"Chol": [0, 0],
+	"Size": [160, 180],
+	"Chol": [150, 250],
 	"TG": [0, 0],
 	"Crea": [0, 0]
 };
@@ -643,7 +643,7 @@ tooltipFunctions.appendLineChart = function(d) {
 	chartProperties.lineChartGroup.selectAll("dot")
 		.data(thisPatientData)
 		.enter().append("circle")
-		.style("fill", "red")
+		.style("fill", "#00BCD4")
 		.attr("r", CONSTANTS.circleRadius.MEDIUM)
 		.attr("cx", function(d) {
 			return xScale(d[chartProperties.xAxisCurrentValue]);

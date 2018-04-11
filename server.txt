@@ -1,2 +1,0 @@
-cd Visualization/Project/TimeRiderProject/
-python -m http.server
