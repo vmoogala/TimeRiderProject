@@ -1023,9 +1023,9 @@ marksFunctions.circleSizeOptions = function(d) {
 				}
 				break;
 			default:
-				if (d[marksControls.colorOption] == 'T') {
+				if (d[marksControls.sizeOption] == 'F') {
 					return CONSTANTS.circleRadius.SMALL;
-				} else if (d.Gender == "female") {
+				} else if (d[marksControls.sizeOption] == 'T') {
 					return CONSTANTS.circleRadius.LARGE;
 				} else {
 					return CONSTANTS.circleRadius.MEDIUM;
@@ -1049,9 +1049,9 @@ marksFunctions.circleSizeOptions = function(d) {
 								}
 								break;
 							default:
-								if (d[marksControls.colorOption] == 'T') {
+								if (d[marksControls.sizeOption] == 'F') {
 									return CONSTANTS.circleRadius.SMALL;
-								} else if (d.Gender == "female") {
+								} else if (d[marksControls.sizeOption] == 'T') {
 									return CONSTANTS.circleRadius.LARGE;
 								} else {
 									return CONSTANTS.circleRadius.MEDIUM;
@@ -1078,9 +1078,9 @@ marksFunctions.circleSizeOptions = function(d) {
 								}
 								break;
 							default:
-								if (d[marksControls.colorOption] == 'T') {
+								if (d[marksControls.sizeOption] == 'F') {
 									return CONSTANTS.circleRadius.SMALL;
-								} else if (d.Gender == "female") {
+								} else if (d[marksControls.sizeOption] == 'T') {
 									return CONSTANTS.circleRadius.LARGE;
 								} else {
 									return CONSTANTS.circleRadius.MEDIUM;
@@ -1114,9 +1114,9 @@ marksFunctions.squareSizeOptions = function(d) {
 				}
 				break;
 			default:
-				if (d[marksControls.colorOption] == 'T') {
+				if (d[marksControls.sizeOption] == 'F') {
 					return CONSTANTS.squareSize.SMALL;
-				} else if (d.Gender == "female") {
+				} else if (d[marksControls.sizeOption] == 'T') {
 					return CONSTANTS.squareSize.LARGE;
 				} else {
 					return CONSTANTS.squareSize.MEDIUM;
@@ -1140,9 +1140,9 @@ marksFunctions.squareSizeOptions = function(d) {
 								}
 								break;
 							default:
-								if (d[marksControls.colorOption] == 'T') {
+								if (d[marksControls.sizeOption] == 'F') {
 									return CONSTANTS.squareSize.SMALL;
-								} else if (d.Gender == "female") {
+								} else if (d[marksControls.sizeOption] == 'T') {
 									return CONSTANTS.squareSize.LARGE;
 								} else {
 									return CONSTANTS.squareSize.MEDIUM;
@@ -1154,7 +1154,7 @@ marksFunctions.squareSizeOptions = function(d) {
 				}
 				break;
 			default:
-				if (d[marksControls.shapeOption] == 'T') {
+				if (d[marksControls.shapeOption] == 'F') {
 					if (marksControls.sizeOption == "none") {
 						return CONSTANTS.squareSize.MEDIUM;
 					} else {
@@ -1169,9 +1169,9 @@ marksFunctions.squareSizeOptions = function(d) {
 								}
 								break;
 							default:
-								if (d[marksControls.colorOption] == 'T') {
+								if (d[marksControls.sizeOption] == 'F') {
 									return CONSTANTS.squareSize.SMALL;
-								} else if (d.Gender == "female") {
+								} else if (d[marksControls.sizeOption] == 'T') {
 									return CONSTANTS.squareSize.LARGE;
 								} else {
 									return CONSTANTS.squareSize.MEDIUM;
@@ -1231,10 +1231,23 @@ colorsLegendSvg.selectAll("circle")
 		return d.color;
 	})
 
+// colorsLegendSvg.selectAll("rect")
+// 	.data(colorsLegendData).enter()
+// 	.append("rect")
+// 	.attr("x", 20)
+// 	.attr("y", function(d, i) {
+// 		return 5 + i * 20;
+// 	})
+// 	.attr("height", CONSTANTS.squareSize.MEDIUM)
+// 	.attr("width", CONSTANTS.squareSize.MEDIUM)
+// 	.attr("fill", function(d) {
+// 		return d.color;
+// 	})
+
 colorsLegendSvg.selectAll("text")
 	.data(colorsLegendData).enter()
 	.append("text")
-	.attr("x", 20)
+	.attr("x", 25)
 	.attr("y", function(d, i) {
 		return 15 + i * 20;
 	})
@@ -1263,7 +1276,7 @@ sizeLegendSvg.selectAll("circle")
 sizeLegendSvg.selectAll("text")
 	.data(colorsLegendData).enter()
 	.append("text")
-	.attr("x", 20)
+	.attr("x", 25)
 	.attr("y", function(d, i) {
 		return 15 + i * 20;
 	})
@@ -1302,7 +1315,7 @@ shapesLegendSvg.selectAll("rect")
 shapesLegendSvg.selectAll("text")
 	.data(["True/Female", "False/Male"]).enter()
 	.append("text")
-	.attr("x", 20)
+	.attr("x", 25)
 	.attr("y", function(d, i) {
 		return 20 + i * 20;
 	})
